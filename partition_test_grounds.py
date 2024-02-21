@@ -17,18 +17,18 @@ def simple_array_test():
         print(Counter(data_y).most_common())
 
 
-def dataloaders_nonIID_test():
-    a = partition_scripts.partition_CIFAR_nonIID(num_clients=5, CIFAR_TYPE="CIFAR10", beta=0.5)
+def dataloaders_nonIID_test(beta=0.5):
+    a = partition_scripts.partition_CIFAR_nonIID(num_clients=5, CIFAR_TYPE="CIFAR100", beta=beta)
 
     return show_dists(a)
 
 def dataloaders_fedfaces_IID_test():
-    a = partition_scripts.partition_FedFaces_equally(5)
+    a = partition_scripts.partition_FedFaces_IID(5)
     
     return show_dists(a)
 
-def dataloaders_fedfaces_nonIID_test():
-    a = partition_scripts.partition_FedFaces_nonIID(num_clients=5, beta=0.5)
+def dataloaders_fedfaces_nonIID_test(beta=0.5):
+    a = partition_scripts.partition_FedFaces_nonIID(num_clients=5, beta=beta)
     return show_dists(a)
 
 def show_dists(a):
@@ -66,41 +66,60 @@ def create_stacked_bar_graph(counters):
     print(counters)
     print("--------------------------------")
 
-    labels = list(itertools.chain([list(c.keys()) for c in counters]))
-    print(labels)
-    #labels = list(set(np.concatenate([c.keys() for c in counters])))
+    categories = []
+    
+    for presences in [list(c.keys()) for c in counters]:
+        categories = categories + presences
+    categories = [int(x) for x in categories]
+    categories = list(set(categories))
+
     num_counters = len(counters)
-    values = np.array([list(counter.values()) for counter in counters])
+
+    values = {}
+    for category in categories:
+        values[category] = [counter.get(category,0) for counter in counters]
+
+    labels = [f"Client {i+1}" for i in range(num_counters)]
 
     # Create a stacked bar plot
-    fig, ax = plt.subplots(figsize=(10, 6))
-    colors = plt.cm.get_cmap('tab20', num_counters)
-    bottom = np.zeros(len(labels))
+    fig, ax = plt.subplots(figsize=(15, 6))
+    #colors = plt.cm.get_cmap('tab20', num_counters)
+    bottom = np.zeros(len(categories))
 
-    for i, counter in enumerate(counters):
-        ax.bar(labels, values[i], bottom=bottom, label=f"Counter {i + 1}", color=colors(i))
-        bottom += values[i]
+    bottom = np.zeros(num_counters)
+    for category, value in values.items():
+        ax.bar(labels, value, label=category, bottom = bottom)
+        bottom += value
 
     # Add labels and legend
-    plt.xlabel("Categories")
+    plt.xlabel("Clients")
     plt.ylabel("Counts")
-    plt.title("Stacked Bar Graph for Python Counters")
-    plt.legend()
+    plt.title("Stacked Bar Graph for Client Class Distribution")
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
     # Show the plot
     plt.show()
 
-print(10* "=", "scenarios" , 10*"=")
-print("simple_distribution")
-c = show_dists(partition_scripts.partition_CIFAR_equally(5))
-create_stacked_bar_graph(c)
-print("CIFAR, nonIID")
-c2 = dataloaders_nonIID_test()
-create_stacked_bar_graph(c2)
-print("FedFaces, IID")
-c3 = dataloaders_fedfaces_IID_test()
-create_stacked_bar_graph(c3)
-print("FedFaces, nonIID")
-c4 = dataloaders_fedfaces_nonIID_test()
-create_stacked_bar_graph(c4)
 
+def graph_and_distribution_tests():
+    print(10* "=", "scenarios" , 10*"=")
+    print("simple_distribution")
+    c = show_dists(partition_scripts.partition_CIFAR_IID(5, "CIFAR100"))
+    create_stacked_bar_graph(c)
+    print("CIFAR, nonIID")
+    c2 = dataloaders_nonIID_test()
+    create_stacked_bar_graph(c2)
+    print("FedFaces, IID")
+    c3 = dataloaders_fedfaces_IID_test()
+    create_stacked_bar_graph(c3)
+    print("FedFaces, nonIID")
+    c4 = dataloaders_fedfaces_nonIID_test()
+    create_stacked_bar_graph(c4)
+
+
+def celeb_IID_test():
+    c = show_dists(partition_scripts.partition_CelebA_IID(5))
+    create_stacked_bar_graph(c)
+
+c = show_dists(partition_scripts.partition_CelebA_nonIID(5))
+create_stacked_bar_graph(c)

@@ -5,58 +5,40 @@ import torch
 import random
 
 from torch.utils.data import DataLoader, random_split, TensorDataset
-from torchvision.datasets import CIFAR10, CIFAR100
+from torchvision.datasets import CIFAR10, CIFAR100, CelebA
 from typing import Any, Callable, Optional, Tuple
 
 BATCH_SIZE = 32
 
-# Taken from FLWR tutorial
-def partition_CIFAR_equally(num_clients, CIFAR_TYPE="CIFAR10"):
-    
+def partition_CIFAR_IID(num_clients, CIFAR_TYPE="CIFAR10"):
     trainset, testset = load_CIFAR(CIFAR_TYPE)
-
-    # Split training set into 'num_clients' partitions to simulate the individual dataset
-    partition_size = len(trainset) // num_clients
-    lengths = [partition_size] * num_clients
-    datasets = random_split(trainset, lengths)
-
-    # Split each partition into train/val and create DataLoader
-    trainloaders, valloaders, testloader = make_loaders(num_clients, testset, datasets)
-
-    return trainloaders, valloaders, testloader
+    #returns a tuple of (trainloaders, valloaders, testloaders)
+    return IID_setup(num_clients=num_clients, trainset=trainset, testset=testset)
 
 
-def partition_FedFaces_equally(num_clients, undersample=True):
+def partition_FedFaces_IID(num_clients, undersample=True):
     train, test = load_fedfaces(undersample=undersample)
-
-    print(f'Training set size: {len(train)}')
-    partition_size = 1 / num_clients
-    lengths = [partition_size for p in range(num_clients)]
-    datasets = random_split(train,lengths)
-
-    trainloaders, valloaders, testloader = make_loaders(num_clients, test, datasets)
-
-    return trainloaders, valloaders, testloader
+    #returns a tuple of (trainloaders, valloaders, testloaders)
+    return IID_setup(num_clients=num_clients, trainset=train, testset=test)
 
 
 def partition_CIFAR_nonIID(num_clients, CIFAR_TYPE="CIFAR10", beta=0.5):
     train, test = load_CIFAR(CIFAR_TYPE)
-
-    datasets = _dirilecht_partition_data(train.data, train.targets, num_clients, beta)
-
-    trainloaders, valloaders, testloader = make_loaders(num_clients, test, datasets)
-
-    return trainloaders, valloaders, testloader
+    #returns a tuple of (trainloaders, valloaders, testloaders)
+    return nonIID_setup(num_clients, beta, train, test)
 
 def partition_FedFaces_nonIID(num_clients, beta=0.5):
     train, test = load_fedfaces()
+    #returns a tuple of (trainloaders, valloaders, testloaders)
+    return nonIID_setup(num_clients, beta, train, test)
 
-    datasets = _dirilecht_partition_data(train.data, train.targets, num_clients, beta)
+def partition_CelebA_IID(num_clients):
+    trainset,testset = load_CelebA()
+    return IID_setup(num_clients=num_clients, trainset=trainset, testset=testset)
 
-    trainloaders, valloaders, testloader = make_loaders(num_clients, test, datasets)
-
-    return trainloaders, valloaders, testloader
-
+def partition_CelebA_nonIID(num_clients, beta=0.5):
+    trainset,testset = load_CelebA()
+    return nonIID_setup(num_clients, beta, trainset, testset)
 '''
 For the function below, I adapted a data partition strategy proposed by Li et al in the study
 
@@ -65,6 +47,33 @@ Federated Learning on Non-IID Data Silos: An Experimental Study
 Found @: https://arxiv.org/pdf/2102.02079.pdf
 
 '''
+def IID_setup(num_clients, trainset, testset):
+    partition_size = 1 / num_clients
+    lengths = [partition_size] * num_clients
+    datasets = random_split(trainset, lengths)
+
+    # Split each partition into train/val and create DataLoader
+    trainloaders, valloaders, testloader = make_loaders(num_clients, testset, datasets)
+    return trainloaders,valloaders,testloader
+
+
+def nonIID_setup(num_clients, beta, train, test):
+    try:
+        datasets = _dirilecht_partition_data(train.data, train.targets, num_clients, beta)
+    except AttributeError: #Failsafe for CelebA
+        xs = []
+        ys = []
+
+        for i in range(len(train)):
+            x, y = train[i]
+            xs.append(x)
+            ys.append(y)
+
+        datasets = _dirilecht_partition_data(np.array(xs), np.array(ys), num_clients, beta)
+
+    trainloaders, valloaders, testloader = make_loaders(num_clients, test, datasets)
+    return trainloaders,valloaders,testloader
+
 def _dirilecht_partition_data(xs, ys, n_parties, beta):
 
     # Partition mini-batch sizes
@@ -106,20 +115,6 @@ def _dirilecht_partition_data(xs, ys, n_parties, beta):
     return partitioned_data
 
 
-def load_CIFAR(CIFAR_TYPE):
-    # Download and transform CIFAR-10 (train and test)
-    transform = transforms.Compose(
-        [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
-    )
-    
-    if CIFAR_TYPE == "CIFAR10":
-        trainset = CIFAR10("./Datasets/ready/cifar-10-python", train=True, transform=transform)
-        testset = CIFAR10("./Datasets/ready/cifar-10-python", train=False, transform=transform)
-    else:
-        trainset = CIFAR100("./Datasets/ready/cifar-100-python", train=True, transform=transform)
-        testset = CIFAR100("./Datasets/ready/cifar-100-python", train=False, transform=transform)
-
-    return trainset,testset
 
 def make_loaders(num_clients, testset, datasets):
     trainloaders = []
@@ -135,8 +130,50 @@ def make_loaders(num_clients, testset, datasets):
 
     return trainloaders,valloaders,testloader
 
+
+'''
+Data Loaders
+'''
+def load_CIFAR(CIFAR_TYPE):
+    # Download and transform CIFAR-10 (train and test)
+    transform = transforms.Compose(
+        [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+    )
+    
+    if CIFAR_TYPE == "CIFAR10":
+        trainset = CIFAR10("./Datasets/ready/cifar-10-python", train=True, transform=transform)
+        testset = CIFAR10("./Datasets/ready/cifar-10-python", train=False, transform=transform)
+    else:
+        trainset = CIFAR100("./Datasets/ready/cifar-100-python", train=True, transform=transform)
+        testset = CIFAR100("./Datasets/ready/cifar-100-python", train=False, transform=transform)
+
+    return trainset,testset
+
+def load_CelebA():
+    # Download and transform CIFAR-10 (train and test)
+    transform = transforms.Compose(
+        [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+    )
+
+    target_transform = transforms.Compose(
+        [lambda y: y[2]]
+    )
+
+    #For the experiment, we're using the attribute attractive
+    attr = np.zeros(40)
+    attr[2] = 1
+
+    attr = torch.Tensor(attr)
+    
+    trainset = CelebA("./Datasets/ready/celebA/", split="valid", target_type="attr", download=False, transform=transform, target_transform=target_transform)
+    testset = CelebA("./Datasets/ready/celebA/", split="test", target_type="attr", download=False, transform=transform, target_transform= target_transform)
+
+    return trainset,testset
+
+
 '''
  FedFaces data is very unbalanced, so we'll be utilzing undersampling to organize the data.
+ Also, some utilities classes are implemented for compatibility with Torch
 '''
 def load_fedfaces(undersample=True):
     data_all = [np.load(f) for f in glob.glob("./Datasets/ready/prepared_data/regions/*.npz")]
