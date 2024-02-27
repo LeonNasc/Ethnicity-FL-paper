@@ -17,8 +17,13 @@ def simple_array_test():
         print(Counter(data_y).most_common())
 
 
+def dataloaders_IID_test():
+    a = partition_scripts.partition_CIFAR_IID(num_clients=5, CIFAR_TYPE="CIFAR10")
+    print(next(iter(a[0][0]))[0].shape)
+
 def dataloaders_nonIID_test(beta=0.5):
-    a = partition_scripts.partition_CIFAR_nonIID(num_clients=5, CIFAR_TYPE="CIFAR100", beta=beta)
+    a = partition_scripts.partition_CIFAR_nonIID(num_clients=5, CIFAR_TYPE="CIFAR10", beta=beta)
+    print(next(iter(a[0][0]))[0].shape)
 
     return show_dists(a)
 
@@ -121,5 +126,8 @@ def celeb_IID_test():
     c = show_dists(partition_scripts.partition_CelebA_IID(5))
     create_stacked_bar_graph(c)
 
-c = show_dists(partition_scripts.partition_CelebA_nonIID(5))
-create_stacked_bar_graph(c)
+def celeb_nonIID_test():
+    c = show_dists(partition_scripts.partition_CelebA_nonIID(5))
+    create_stacked_bar_graph(c)
+
+dataloaders_nonIID_test()

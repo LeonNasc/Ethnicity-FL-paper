@@ -114,11 +114,11 @@ def test(net, testloader, DEVICE="cpu"):
     accuracy = correct / total
     return loss, accuracy
 
-def centralized_training(trainloader, valloader, testloader, DEVICE="cpu"):
+def centralized_training(trainloader, valloader, testloader, DEVICE="cpu", epochs=5):
     torch.manual_seed(0)
     net = Net().to(DEVICE)
 
-    for epoch in range(5):
+    for epoch in range(epochs):
         train(net, trainloader, 1)
         loss, accuracy = test(net, valloader)
         print(f"Epoch {epoch+1}: validation loss {loss}, accuracy {accuracy}")

@@ -1,6 +1,7 @@
 import torchvision.transforms as transforms
 import numpy as np
 import glob
+import os
 import torch
 import random
 
@@ -8,7 +9,7 @@ from torch.utils.data import DataLoader, random_split, TensorDataset
 from torchvision.datasets import CIFAR10, CIFAR100, CelebA
 from typing import Any, Callable, Optional, Tuple
 
-BATCH_SIZE = 32
+BATCH_SIZE = 64
 
 def partition_CIFAR_IID(num_clients, CIFAR_TYPE="CIFAR10"):
     trainset, testset = load_CIFAR(CIFAR_TYPE)
@@ -50,29 +51,38 @@ Found @: https://arxiv.org/pdf/2102.02079.pdf
 def IID_setup(num_clients, trainset, testset):
     partition_size = 1 / num_clients
     lengths = [partition_size] * num_clients
+    print(f'Shape CIFAR IID: {trainset.data[0].shape}')
     datasets = random_split(trainset, lengths)
-
     # Split each partition into train/val and create DataLoader
     trainloaders, valloaders, testloader = make_loaders(num_clients, testset, datasets)
     return trainloaders,valloaders,testloader
 
 
 def nonIID_setup(num_clients, beta, train, test):
-    try:
-        datasets = _dirilecht_partition_data(train.data, train.targets, num_clients, beta)
-    except AttributeError: #Failsafe for CelebA
-        xs = []
-        ys = []
-
-        for i in range(len(train)):
-            x, y = train[i]
-            xs.append(x)
-            ys.append(y)
-
-        datasets = _dirilecht_partition_data(np.array(xs), np.array(ys), num_clients, beta)
-
+    print(f'Shape CIFAR nonIID: {train.data[0].shape}')
+    datasets = _dirilecht_partition_data(train.data, train.targets, num_clients, beta)
     trainloaders, valloaders, testloader = make_loaders(num_clients, test, datasets)
     return trainloaders,valloaders,testloader
+
+def convert_celebA_to_numpy(split, split_name, save=False):
+    print(f"Converting {split_name} into npz")
+
+    xs = []
+    ys = []
+
+    for i in range(1,len(split)):
+        x, y = split[i]
+        xs.append(x) 
+        ys.append(y)
+
+    xs = np.array(xs)
+    ys = np.array(ys)
+
+    if save:
+        np.savez(f"./Datasets/ready/celebA/loaded_np/{split_name}", xs=xs, ys=ys)
+
+    print("Finished")
+    return xs,ys
 
 def _dirilecht_partition_data(xs, ys, n_parties, beta):
 
@@ -109,7 +119,9 @@ def _dirilecht_partition_data(xs, ys, n_parties, beta):
 
     partitioned_data = []
     for k,v in net_dataidx_map.items():
-        local_xs, local_ys = (torch.Tensor(xs[v]), torch.Tensor(ys[v]))
+        corr_shape = (len(v), 3, xs.shape[2],xs.shape[2])
+        local_xs = torch.Tensor(xs[v].reshape(corr_shape)).to("cpu")
+        local_ys = torch.LongTensor(ys[v]).to("cpu")
         partitioned_data.append(TensorDataset(local_xs,local_ys))
 
     return partitioned_data
@@ -151,22 +163,30 @@ def load_CIFAR(CIFAR_TYPE):
 
 def load_CelebA():
     # Download and transform CIFAR-10 (train and test)
-    transform = transforms.Compose(
-        [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
-    )
+    globed =glob.glob("./Datasets/ready/celebA/loaded_np/*.npz")
+    if  len(globed) == 0:
+        transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+        )
 
-    target_transform = transforms.Compose(
-        [lambda y: y[2]]
-    )
+        target_transform = transforms.Compose(
+            [lambda y: y[2]]
+        )
 
-    #For the experiment, we're using the attribute attractive
-    attr = np.zeros(40)
-    attr[2] = 1
+        #For the experiment, we're using the attribute attractive
+        attr = np.zeros(40)
+        attr[2] = 1
 
-    attr = torch.Tensor(attr)
-    
-    trainset = CelebA("./Datasets/ready/celebA/", split="valid", target_type="attr", download=False, transform=transform, target_transform=target_transform)
-    testset = CelebA("./Datasets/ready/celebA/", split="test", target_type="attr", download=False, transform=transform, target_transform= target_transform)
+        attr = torch.Tensor(attr)
+        
+        trainset = CelebA("./Datasets/ready/celebA/", split="valid", target_type="attr", download=False, transform=transform, target_transform=target_transform)
+        testset = CelebA("./Datasets/ready/celebA/", split="test", target_type="attr", download=False, transform=transform, target_transform= target_transform)
+    else:
+        print("Loaded from NPZ")
+        train = np.load("./Datasets/ready/celebA/loaded_np/valid.npz")
+        trainset = LoadedCelebA(train["xs"], train["ys"])
+        test = np.load("./Datasets/ready/celebA/loaded_np/test.npz")
+        testset = LoadedCelebA(test["xs"], test["ys"])
 
     return trainset,testset
 
@@ -228,6 +248,47 @@ def undersample_fedfaces(merged_data):
 
 
 class FedFaces(torch.utils.data.Dataset):
+
+    def __init__(self, 
+                    xs, 
+                    ys,
+                    transform: Optional[Callable] = None,
+                    target_transform: Optional[Callable] = None):
+
+        self.data = xs
+        self.targets = ys
+        self.transform = transform
+        self.target_transform = target_transform
+
+
+    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+        """
+        Args:
+            index (int): Index
+
+        Returns:
+            tuple: (image, target) where target is index of the target class.
+        """
+        img, target = self.data[index], self.targets[index]
+
+        if self.transform is not None:
+            img = self.transform(img)
+
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+
+        return img, target
+
+
+    def __len__(self) -> int:
+        return len(self.data)
+
+    def _check_integrity(self) -> bool:
+        return True
+        
+
+
+class LoadedCelebA(torch.utils.data.Dataset):
 
     def __init__(self, 
                     xs, 
