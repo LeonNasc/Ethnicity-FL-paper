@@ -1,5 +1,4 @@
 import numpy as np
-import itertools
 import partition_scripts
 import random
 import matplotlib.pyplot as plt
@@ -17,12 +16,12 @@ def simple_array_test():
         print(Counter(data_y).most_common())
 
 
-def dataloaders_IID_test():
-    a = partition_scripts.partition_CIFAR_IID(num_clients=5, CIFAR_TYPE="CIFAR10")
+def dataloaders_IID_test(cifar="CIFAR10"):
+    a = partition_scripts.partition_CIFAR_IID(num_clients=5, CIFAR_TYPE=cifar)
     print(next(iter(a[0][0]))[0].shape)
 
-def dataloaders_nonIID_test(beta=0.5):
-    a = partition_scripts.partition_CIFAR_nonIID(num_clients=5, CIFAR_TYPE="CIFAR10", beta=beta)
+def dataloaders_nonIID_test(beta=0.5, cifar="CIFAR10"):
+    a = partition_scripts.partition_CIFAR_nonIID(num_clients=5, CIFAR_TYPE=cifar, beta=beta)
     print(next(iter(a[0][0]))[0].shape)
 
     return show_dists(a)
@@ -40,8 +39,7 @@ def show_dists(a):
     counters = []
     for dlr in a[0]:
         c = Counter()
-        itr = iter(dlr)
-        _, train_labels = next(itr)
+        itr, train_labels = get_labels(dlr)
 
         try:
             while True:
@@ -54,6 +52,11 @@ def show_dists(a):
         counters.append(c)
 
     return counters
+
+def get_labels(dlr):
+    itr = iter(dlr)
+    _, train_labels = next(itr)
+    return itr,train_labels
 
 
 def create_stacked_bar_graph(counters):
@@ -130,4 +133,4 @@ def celeb_nonIID_test():
     c = show_dists(partition_scripts.partition_CelebA_nonIID(5))
     create_stacked_bar_graph(c)
 
-dataloaders_nonIID_test()
+celeb_nonIID_test()

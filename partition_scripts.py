@@ -51,7 +51,6 @@ Found @: https://arxiv.org/pdf/2102.02079.pdf
 def IID_setup(num_clients, trainset, testset):
     partition_size = 1 / num_clients
     lengths = [partition_size] * num_clients
-    print(f'Shape CIFAR IID: {trainset.data[0].shape}')
     datasets = random_split(trainset, lengths)
     # Split each partition into train/val and create DataLoader
     trainloaders, valloaders, testloader = make_loaders(num_clients, testset, datasets)
@@ -59,7 +58,7 @@ def IID_setup(num_clients, trainset, testset):
 
 
 def nonIID_setup(num_clients, beta, train, test):
-    print(f'Shape CIFAR nonIID: {train.data[0].shape}')
+    print(f'Shape nonIID: {train.data[0].shape}')
     datasets = _dirilecht_partition_data(train.data, train.targets, num_clients, beta)
     trainloaders, valloaders, testloader = make_loaders(num_clients, test, datasets)
     return trainloaders,valloaders,testloader
@@ -119,9 +118,15 @@ def _dirilecht_partition_data(xs, ys, n_parties, beta):
 
     partitioned_data = []
     for k,v in net_dataidx_map.items():
-        corr_shape = (len(v), 3, xs.shape[2],xs.shape[2])
-        local_xs = torch.Tensor(xs[v].reshape(corr_shape)).to("cpu")
-        local_ys = torch.LongTensor(ys[v]).to("cpu")
+        if len(xs.shape) == 3:
+            channels = 1
+        else :
+            channels = 3
+
+        print(xs.shape)
+        corr_shape = (len(v),channels, xs.shape[-2],xs.shape[-1])
+        local_xs = torch.Tensor(xs[v].astype(np.float32).reshape(corr_shape))
+        local_ys = torch.LongTensor(ys[v].astype(np.float32))
         partitioned_data.append(TensorDataset(local_xs,local_ys))
 
     return partitioned_data
@@ -166,7 +171,7 @@ def load_CelebA():
     globed =glob.glob("./Datasets/ready/celebA/loaded_np/*.npz")
     if  len(globed) == 0:
         transform = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+            [transforms.Resize((64,64)), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
         )
 
         target_transform = transforms.Compose(
@@ -181,6 +186,9 @@ def load_CelebA():
         
         trainset = CelebA("./Datasets/ready/celebA/", split="valid", target_type="attr", download=False, transform=transform, target_transform=target_transform)
         testset = CelebA("./Datasets/ready/celebA/", split="test", target_type="attr", download=False, transform=transform, target_transform= target_transform)
+
+        convert_celebA_to_numpy(trainset, "valid", True)
+        convert_celebA_to_numpy(testset, "test", True)
     else:
         print("Loaded from NPZ")
         train = np.load("./Datasets/ready/celebA/loaded_np/valid.npz")
@@ -195,13 +203,32 @@ def load_CelebA():
  FedFaces data is very unbalanced, so we'll be utilzing undersampling to organize the data.
  Also, some utilities classes are implemented for compatibility with Torch
 '''
+def convert_to_3d_with_repeat(array_2d):
+    """
+    Convert a 2D numpy array to a 3D array with values repeated along the new dimension.
+
+    Parameters:
+    array_2d (numpy.ndarray): The input 2D numpy array.
+
+    Returns:
+    numpy.ndarray: The converted 3D numpy array with shape (N, M, 3).
+    """
+    # Add a new axis to the 2D array
+    array_3d = array_2d[:, :, np.newaxis]
+    
+    # Repeat the values along the new dimension
+    array_3d = np.repeat(array_3d, 3, axis=2)
+    
+    return array_3d
+
+
 def load_fedfaces(undersample=True):
     data_all = [np.load(f) for f in glob.glob("./Datasets/ready/prepared_data/regions/*.npz")]
 
-    merged_data = {"X": data_all[0]["X"], "Y": data_all[0]["Y"]} 
+    merged_data = {"X": [convert_to_3d_with_repeat(x) for x in data_all[0]["X"]], "Y": data_all[0]["Y"]} 
 
     for data in data_all[1:]:
-        xs = np.concatenate([merged_data["X"], data["X"]])
+        xs = np.concatenate([merged_data["X"], [convert_to_3d_with_repeat(x) for x in data["X"]]])
         ys = np.concatenate([merged_data["Y"], data["Y"]])
         merged_data["X"] = xs
         merged_data["Y"] = ys
@@ -215,11 +242,8 @@ def load_fedfaces(undersample=True):
     train_x, train_y = (merged_data["X"][msk], merged_data["Y"][msk])
     test_x, test_y = (merged_data["X"][~msk], merged_data["Y"][~msk])
 
-    #train = TensorDataset(torch.Tensor(train_x), torch.Tensor(train_y))
-    #test = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
-
-    train = FedFaces(train_x, train_y)
-    test = FedFaces(test_x, test_y)
+    train = FedFaces(train_x.astype(np.float32),train_y)
+    test = FedFaces(test_x.astype(np.float32), test_y)
 
     return train, test
 
@@ -257,6 +281,9 @@ class FedFaces(torch.utils.data.Dataset):
 
         self.data = xs
         self.targets = ys
+
+        self.data = self.data.transpose((0, 3, 1, 2))  # convert to HWC
+
         self.transform = transform
         self.target_transform = target_transform
 
@@ -300,7 +327,6 @@ class LoadedCelebA(torch.utils.data.Dataset):
         self.targets = ys
         self.transform = transform
         self.target_transform = target_transform
-
 
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
         """

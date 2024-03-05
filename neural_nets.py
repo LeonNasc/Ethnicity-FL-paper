@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import intel_extension_for_pytorch as ipex
 import numpy as np
 
 from typing import List, Tuple
@@ -29,52 +30,75 @@ class _VGG(nn.Module):
     VGG module for 3x32x32 input, 10 classes
     """
 
-    def __init__(self, name):
+    def __init__(self, name, classes=10, shape=(32,32)):
         super(_VGG, self).__init__()
         cfg = _cfg[name]
         self.layers = _make_layers(cfg)
-        flatten_features = 512
-        self.fc1 = nn.Sequential(
-            nn.AdaptiveAvgPool2d(output_size=(1, 1)),
-            nn.Linear(flatten_features, 10))
-        # self.fc2 = nn.Linear(4096, 4096)
-        # self.fc3 = nn.Linear(4096, 10)
-
+        #print(f'fc1 expects: {2*shape[0]*shape[1]}')
+        self.fc1 = nn.Linear(2*shape[0]*shape[1], 4096)  
+        self.fc2 = nn.Linear(4096, 4096)
+        self.fc3 = nn.Linear(4096, classes)
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(p=0.5)  # Adding dropout for regularization
     def forward(self, x):
+        
         y = self.layers(x)
-        y = y.view(y.size(0), -1)
+        y = y.view(y.size(0), -1)  # Flatten the input features
+        #print(f'conv2d gives: {y.shape}')
         y = self.fc1(y)
-        # y = self.fc2(y)
-        # y = self.fc3(y)
+        y = self.relu(y)
+        y = self.dropout(y)
+        y = self.fc2(y)
+        y = self.relu(y)
+        y = self.dropout(y)
+        y = self.fc3(y)
         return y
     
 
 class Net(nn.Module):
-    def __init__(self) -> None:
+    def __init__(self, classes=10, shape=(32,32)) -> None:
         super(Net, self).__init__()
         self.base = 128
-        self.conv1 = nn.Conv2d(3, self.base, 5)
+        self.input_shape = shape
+        self.conv1 = nn.Conv2d(3, self.base, 5, padding=2)  # Add padding to preserve spatial dimensions
         self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(self.base, self.base*2, 5)
-        self.conv3 = nn.Conv2d(128, 256, 5)
-        self.fc1 = nn.Linear(self.base*2 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
+        self.conv2 = nn.Conv2d(self.base, self.base*2, 5, padding=2)  # Add padding to preserve spatial dimensions
+        self.conv3 = nn.Conv2d(self.base*2, 256, 5, padding=2)  # Add padding to preserve spatial dimensions
+
+        # Calculate the size of the fully connected layer dynamically
+        self.fc_input_size = self.calculate_fc_input_size()
+
+        self.fc1 = nn.Linear(self.fc_input_size, 120)
+        self.fc2 = nn.Linear(120, classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.convolutional_layers_output(x)
+        # Dynamic input size handling
+        x = x.view(-1, self.fc_input_size)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+    def calculate_fc_input_size(self) -> int:
+        # Create a sample input and pass it through the convolutional layers
+        # to get the output shape for the fully connected layer
+        sample_input = torch.randn(1, 3, self.input_shape[0], self.input_shape[1])  # Assuming input size is 32x32
+        sample_output = self.convolutional_layers_output(sample_input)
+        return sample_output.view(sample_output.size(0), -1).size(1)
+
+    def convolutional_layers_output(self, x: torch.Tensor) -> torch.Tensor:
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
-        # x = self.pool(F.relu(self.conv3(x)))
-        x = x.view(-1, self.base*2 * 5 * 5)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = self.pool(F.relu(self.conv3(x)))
         return x
+
+
 
 def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu"):
     """Train the network on the training set."""
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(net.parameters())
+    #net, optimizer = ipex.optimize(model=net, optimizer=optimizer)
     net.train()
     for epoch in range(epochs):
         correct, total, epoch_loss = 0, 0, 0.0
@@ -114,16 +138,20 @@ def test(net, testloader, DEVICE="cpu"):
     accuracy = correct / total
     return loss, accuracy
 
-def centralized_training(trainloader, valloader, testloader, DEVICE="cpu", epochs=5):
+def centralized_training(trainloader, valloader, testloader, DEVICE="cpu", net=None, epochs=5, classes=10):
     torch.manual_seed(0)
-    net = Net().to(DEVICE)
+
+    if net is None:
+        net = Net(classes).to(DEVICE)
+    else:
+        net = net.to(DEVICE)
 
     for epoch in range(epochs):
-        train(net, trainloader, 1)
+        train(net, trainloader, 1, DEVICE=DEVICE)
         loss, accuracy = test(net, valloader)
         print(f"Epoch {epoch+1}: validation loss {loss}, accuracy {accuracy}")
 
-    loss, accuracy = test(net, testloader)
+    loss, accuracy = test(net, testloader, DEVICE=DEVICE)
     print(f"Final test set performance:\n\tloss {loss}\n\taccuracy {accuracy}")
 
 
@@ -137,26 +165,26 @@ _cfg = {
     'VGG19': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
 }
 
-def VGG7():
-    return _VGG('VGG7')
+def VGG7(classes, shape=(32,32)):
+    return _VGG('VGG7', classes, shape)
     
-def VGG9():
-    return _VGG('VGG9')
+def VGG9(classes):
+    return _VGG('VGG9', classes)
 
-def VGG11():
-    return _VGG('VGG11')
-
-
-def VGG13():
-    return _VGG('VGG13')
+def VGG11(classes):
+    return _VGG('VGG11', classes)
 
 
-def VGG16():
-    return _VGG('VGG16')
+def VGG13(classes):
+    return _VGG('VGG13', classes)
 
 
-def VGG19():
-    return _VGG('VGG19')
+def VGG16(classes, shape=(32,32)):
+    return _VGG('VGG16', classes, shape)
+
+
+def VGG19(classes):
+    return _VGG('VGG19', classes)
 
 ######################################## 
 #   Neural Network Parameter Funcionality for FL
