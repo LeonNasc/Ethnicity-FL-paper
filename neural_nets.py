@@ -1,8 +1,10 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import intel_extension_for_pytorch as ipex
 import numpy as np
+import torcheval
+from torchmetrics.functional.classification import multiclass_cohen_kappa
+
 
 from typing import List, Tuple
 from collections import OrderedDict
@@ -34,12 +36,14 @@ class _VGG(nn.Module):
         super(_VGG, self).__init__()
         cfg = _cfg[name]
         self.layers = _make_layers(cfg)
+        self.classes = classes
         #print(f'fc1 expects: {2*shape[0]*shape[1]}')
         self.fc1 = nn.Linear(2*shape[0]*shape[1], 4096)  
         self.fc2 = nn.Linear(4096, 4096)
         self.fc3 = nn.Linear(4096, classes)
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(p=0.5)  # Adding dropout for regularization
+
     def forward(self, x):
         
         y = self.layers(x)
@@ -98,7 +102,6 @@ def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu"):
     """Train the network on the training set."""
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(net.parameters())
-    #net, optimizer = ipex.optimize(model=net, optimizer=optimizer)
     net.train()
     for epoch in range(epochs):
         correct, total, epoch_loss = 0, 0, 0.0
@@ -106,8 +109,6 @@ def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu"):
             images, labels = images.to(DEVICE), labels.to(DEVICE)
             optimizer.zero_grad()
             outputs = net(images)
-            # print(outputs[0])
-            # print(labels[0])
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -117,26 +118,36 @@ def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu"):
             correct += (torch.max(outputs.data, 1)[1] == labels).sum().item()
         epoch_loss /= len(trainloader.dataset)
         epoch_acc = correct / total
+
         if verbose:
             print(f"Epoch {epoch+1}: train loss {epoch_loss}, accuracy {epoch_acc}")
 
 
-def test(net, testloader, DEVICE="cpu"):
+def test(net, testloader, DEVICE="cpu", classes=2):
     """Evaluate the network on the entire test set."""
     criterion = torch.nn.CrossEntropyLoss()
-    correct, total, loss = 0, 0, 0.0
+    correct, total, loss, f1, roc, kappa  = 0, 0, 0.0, 0.0, 0.0, 0.0
     net.eval()
     with torch.no_grad():
         for images, labels in testloader:
             images, labels = images.to(DEVICE), labels.to(DEVICE)
             outputs = net(images)
+
             loss += criterion(outputs, labels).item()
+            f1 += torcheval.metrics.functional.multiclass_f1_score(outputs, labels, num_classes= classes)
+            roc += torcheval.metrics.functional.multiclass_auroc(outputs, labels, num_classes= classes)
+            kappa += multiclass_cohen_kappa(preds, target, num_classes=3)
+
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
     loss /= len(testloader.dataset)
+    f1 /= len(testloader.dataset)
+    roc /= len(testloader.dataset)
+    kappa /= len(testloader.dataset)
     accuracy = correct / total
-    return loss, accuracy
+
+    return loss, accuracy, f1, roc, kappa
 
 def centralized_training(trainloader, valloader, testloader, DEVICE="cpu", net=None, epochs=5, classes=10):
     torch.manual_seed(0)
@@ -198,5 +209,5 @@ def set_parameters(net, parameters: List[np.ndarray]):
     # Updates the given net with the given parameters
     # (retruns nothing as it will just modify the net object)
     params_dict = zip(net.state_dict().keys(), parameters)
-    state_dict = OrderedDict({k:torch.Tensor(v) for k, v in params_dict})
+    state_dict = OrderedDict({k:torch.Tensor(v) for k, v in params_dict if len(v.shape) > 0})
     net.load_state_dict(state_dict, strict=True)

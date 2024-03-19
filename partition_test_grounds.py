@@ -132,5 +132,3 @@ def celeb_IID_test():
 def celeb_nonIID_test():
     c = show_dists(partition_scripts.partition_CelebA_nonIID(5))
     create_stacked_bar_graph(c)
-
-celeb_nonIID_test()

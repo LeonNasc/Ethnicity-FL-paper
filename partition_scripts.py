@@ -11,78 +11,83 @@ from typing import Any, Callable, Optional, Tuple
 
 BATCH_SIZE = 64
 
-def partition_CIFAR_IID(num_clients, CIFAR_TYPE="CIFAR10"):
+def partition_CIFAR_IID(num_clients, CIFAR_TYPE="CIFAR10", save=False, save_path="-IID"):
     trainset, testset = load_CIFAR(CIFAR_TYPE)
+    save_path = CIFAR_TYPE + save_path
     #returns a tuple of (trainloaders, valloaders, testloaders)
-    return IID_setup(num_clients=num_clients, trainset=trainset, testset=testset)
+    return IID_setup(num_clients=num_clients, trainset=trainset, testset=testset, save=save, save_path=save_path)
 
-
-def partition_FedFaces_IID(num_clients, undersample=True):
-    train, test = load_fedfaces(undersample=undersample)
+def partition_FedFaces_IID(num_clients, undersample=True, save=False, save_path="fedFaces-IID"):
+    trainset, testset = load_fedfaces(undersample=undersample)
     #returns a tuple of (trainloaders, valloaders, testloaders)
-    return IID_setup(num_clients=num_clients, trainset=train, testset=test)
+    return IID_setup(num_clients=num_clients, trainset=trainset, testset=testset, save=save, save_path=save_path)
 
-
-def partition_CIFAR_nonIID(num_clients, CIFAR_TYPE="CIFAR10", beta=0.5):
-    train, test = load_CIFAR(CIFAR_TYPE)
-    #returns a tuple of (trainloaders, valloaders, testloaders)
-    return nonIID_setup(num_clients, beta, train, test)
-
-def partition_FedFaces_nonIID(num_clients, beta=0.5):
-    train, test = load_fedfaces()
-    #returns a tuple of (trainloaders, valloaders, testloaders)
-    return nonIID_setup(num_clients, beta, train, test)
-
-def partition_CelebA_IID(num_clients):
+def partition_CelebA_IID(num_clients, save=False, save_path="CelebA-IID"):
     trainset,testset = load_CelebA()
-    return IID_setup(num_clients=num_clients, trainset=trainset, testset=testset)
+    return IID_setup(num_clients=num_clients, trainset=trainset, testset=testset, save=save, save_path=save_path)
 
-def partition_CelebA_nonIID(num_clients, beta=0.5):
+def partition_CIFAR_nonIID(num_clients, CIFAR_TYPE="CIFAR10", beta=0.5, save=False, save_path="Non-IID"):
+    trainset, testset = load_CIFAR(CIFAR_TYPE)
+    save_path = CIFAR_TYPE + save_path
+    #returns a tuple of (trainloaders, valloaders, testloaders)
+    return nonIID_setup(num_clients=num_clients, trainset=trainset, beta=beta, testset=testset, save=save, save_path=save_path)
+
+def partition_FedFaces_nonIID(num_clients, beta=0.5, save=False, save_path="fedFacesNon-IID"):
+    trainset, testset = load_fedfaces()
+    #returns a tuple of (trainloaders, valloaders, testloaders)
+    return nonIID_setup(num_clients=num_clients, trainset=trainset, beta=beta, testset=testset, save=save, save_path=save_path)
+
+def partition_CelebA_nonIID(num_clients, beta=0.5, save=False, save_path="CelebANon-IID"):
     trainset,testset = load_CelebA()
-    return nonIID_setup(num_clients, beta, trainset, testset)
-'''
-For the function below, I adapted a data partition strategy proposed by Li et al in the study
+    return nonIID_setup(num_clients=num_clients, trainset=trainset, beta=beta, testset=testset, save=save, save_path=save_path)
 
-Federated Learning on Non-IID Data Silos: An Experimental Study
 
-Found @: https://arxiv.org/pdf/2102.02079.pdf
+############################
+# Partitioning setups
+############################
 
-'''
-def IID_setup(num_clients, trainset, testset):
+def IID_setup(num_clients, trainset, testset, save=False, save_path=None):
+    print(f'Shape nonIID: {trainset.data[0].shape}')
     partition_size = 1 / num_clients
-    lengths = [partition_size] * num_clients
+    lengths = [partition_size] * (num_clients -1)
+    lengths.append(0.999999999 - (partition_size * (num_clients-1))) # Fending against rounding errors
+    print(lengths)
+    print(sum(lengths))
     datasets = random_split(trainset, lengths)
     # Split each partition into train/val and create DataLoader
     trainloaders, valloaders, testloader = make_loaders(num_clients, testset, datasets)
-    return trainloaders,valloaders,testloader
-
-
-def nonIID_setup(num_clients, beta, train, test):
-    print(f'Shape nonIID: {train.data[0].shape}')
-    datasets = _dirilecht_partition_data(train.data, train.targets, num_clients, beta)
-    trainloaders, valloaders, testloader = make_loaders(num_clients, test, datasets)
-    return trainloaders,valloaders,testloader
-
-def convert_celebA_to_numpy(split, split_name, save=False):
-    print(f"Converting {split_name} into npz")
-
-    xs = []
-    ys = []
-
-    for i in range(1,len(split)):
-        x, y = split[i]
-        xs.append(x) 
-        ys.append(y)
-
-    xs = np.array(xs)
-    ys = np.array(ys)
 
     if save:
-        np.savez(f"./Datasets/ready/celebA/loaded_np/{split_name}", xs=xs, ys=ys)
+        for i in range(num_clients):
+            print(f'(IID) Datasets size {len(datasets[i])}, shape {datasets[i][0][0].shape}')
+            torch.save(trainloaders[i], f"./FL_Data/{save_path}_loaders_IID_{num_clients}_clients_client{i}_TRAIN.bin")
+            torch.save(valloaders[i], f"./FL_Data/{save_path}_loaders_IID_{num_clients}_clients_clients{i}_VAL.bin")
 
-    print("Finished")
-    return xs,ys
+        torch.save(testloader, f"./FL_Data/{save_path}_loaders_IID_{num_clients}_clients_TEST.bin")
 
+    return trainloaders,valloaders,testloader
+
+def nonIID_setup(num_clients, beta, trainset, testset, save=False, save_path=None):
+    print(f'Shape nonIID: {trainset.data[0].shape}')
+    datasets = _dirilecht_partition_data(trainset.data, trainset.targets, num_clients, beta)
+    trainloaders, valloaders, testloader = make_loaders(num_clients, testset, datasets)
+
+    if save:
+        for i in range(num_clients):
+            print(f'(Non-IID) Datasets size {len(datasets[i])}, shape {datasets[i][0][0].shape}')
+            torch.save(trainloaders[i], f"./FL_Data/{save_path}_loaders_nonIID_{num_clients}_clients_client{i}_TRAIN.bin")
+            torch.save(valloaders[i], f"./FL_Data/{save_path}_loaders_nonIID_{num_clients}_clients_clients{i}_VAL.bin")
+
+        torch.save(testloader, f"./FL_Data/{save_path}_loaders_IID_{num_clients}_clients_TEST.bin")
+
+
+    return trainloaders,valloaders,testloader
+
+##########################
+# For the function below, I adapted a data partition strategy proposed by Li et al in the study
+# Federated Learning on Non-IID Data Silos: An Experimental Study
+# Found @: https://arxiv.org/pdf/2102.02079.pdf
+##########################
 def _dirilecht_partition_data(xs, ys, n_parties, beta):
 
     # Partition mini-batch sizes
@@ -123,14 +128,32 @@ def _dirilecht_partition_data(xs, ys, n_parties, beta):
         else :
             channels = 3
 
-        print(xs.shape)
-        corr_shape = (len(v),channels, xs.shape[-2],xs.shape[-1])
+        corr_shape = (len(v),channels, xs.shape[-2], xs.shape[-1] if xs.shape[-1] != 3 else xs.shape[1])
         local_xs = torch.Tensor(xs[v].astype(np.float32).reshape(corr_shape))
         local_ys = torch.LongTensor(ys[v].astype(np.float32))
         partitioned_data.append(TensorDataset(local_xs,local_ys))
 
     return partitioned_data
 
+def convert_celebA_to_numpy(split, split_name, save=False):
+    print(f"Converting {split_name} into npz")
+
+    xs = []
+    ys = []
+
+    for i in range(1,len(split)):
+        x, y = split[i]
+        xs.append(x) 
+        ys.append(y)
+
+    xs = np.array(xs)
+    ys = np.array(ys)
+
+    if save:
+        np.savez(f"./Datasets/ready/celebA/loaded_np/{split_name}", xs=xs, ys=ys)
+
+    print("Finished")
+    return xs,ys
 
 
 def make_loaders(num_clients, testset, datasets):
@@ -192,17 +215,17 @@ def load_CelebA():
     else:
         print("Loaded from NPZ")
         train = np.load("./Datasets/ready/celebA/loaded_np/valid.npz")
-        trainset = LoadedCelebA(train["xs"], train["ys"])
+        trainset = LoadedCelebA(torch.Tensor(train["xs"][:1000].astype(np.float32)), train["ys"][:1000])
         test = np.load("./Datasets/ready/celebA/loaded_np/test.npz")
-        testset = LoadedCelebA(test["xs"], test["ys"])
+        testset = LoadedCelebA(torch.Tensor(test["xs"].astype(np.float32)), test["ys"])
 
     return trainset,testset
 
 
-'''
- FedFaces data is very unbalanced, so we'll be utilzing undersampling to organize the data.
- Also, some utilities classes are implemented for compatibility with Torch
-'''
+##############################
+# FedFaces data is very unbalanced, so we'll be utilzing undersampling to organize the data.
+# Also, some utilities classes are implemented for compatibility with Torch
+##############################
 def convert_to_3d_with_repeat(array_2d):
     """
     Convert a 2D numpy array to a 3D array with values repeated along the new dimension.
