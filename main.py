@@ -12,17 +12,7 @@ today = datetime.datetime.today()
 fl.common.logger.configure(identifier="FL Paper Experiment", filename=f"./logs/log_FLWR_{today.timestamp()}.txt")
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-NUM_CLIENTS = 50
-TRAINING_ROUNDS = 3
-DATA_STORE = {
-    "CIFAR10_IID": None,
-    "CIFAR10_NonIID": None,
-    "CIFAR100_IID": None,
-    "CIFAR100_NonIID": None,
-    "FedFaces_IID": None,
-    "FedFaces_NonIID": None,
-
-}
+DATA_STORE = {}
 
 class FedExperiment():
 
@@ -31,12 +21,11 @@ class FedExperiment():
         self.strategy = strategy
         self.name = name
 
-    def simulate_FL(self, rounds=1):
+    def simulate_FL(self, rounds, clients):
         log(INFO, "\n" + 10 * "========" + "\n" + self.name + " has started\n" + 10 * "========"  )
         metrics = fl.simulation.start_simulation(
                             client_fn=self.client_fn,
-                            num_clients=NUM_CLIENTS,
-                            #num_clients=10,
+                            num_clients=clients,
                             config=fl.server.ServerConfig(num_rounds=rounds),
                             strategy=self.strategy,
                             client_resources=client_resources,
@@ -48,7 +37,7 @@ class FedExperiment():
 # Specify client resources if you need GPU (defaults to 1 CPU and 0 GPU)
 def  get_resources():
     if DEVICE.type == "cpu":
-        client_resources = {"num_cpus": 4, "num_gpus": 0}
+        client_resources = {"num_cpus": 2, "num_gpus": 0}
     else:
         client_resources = {"num_cpus": 2, "num_gpus": 1}
 
@@ -57,14 +46,13 @@ def  get_resources():
 client_resources = get_resources()
 
 # Needed for initial params in fedAdam and FedYogi
-sample_net = VGG7(classes=2,shape=(64,64)) #Only for CelebA/FedFaces - Edit class numbers
+#sample_net = VGG7(classes=2,shape=(64,64)) #Only for CelebA/FedFaces - Edit class numbers
 #sample_net = VGG7(classes=100,shape=(32,32)) #Only for CIFAR10 - Edit class numbers
-params = get_parameters(sample_net)
 
-def setup_strategies(sample_net):
+def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     fedAvg = fl.server.strategy.FedAvg(
-    fraction_fit=0.5,  
-    fraction_evaluate=0.5,  
+    fraction_fit=fraction_fit,  
+    fraction_evaluate=fraction_eval,  
     min_fit_clients=1,  
     min_evaluate_clients=1, 
     min_available_clients=1,
@@ -74,8 +62,8 @@ def setup_strategies(sample_net):
 )
 
     fedProx = fl.server.strategy.FedProx(
-    fraction_fit=0.5,  
-    fraction_evaluate=0.5,  
+    fraction_fit=fraction_fit,  
+    fraction_evaluate=fraction_eval,  
     min_fit_clients=1,  
     min_evaluate_clients=1, 
     min_available_clients=1,
@@ -85,8 +73,8 @@ def setup_strategies(sample_net):
 )
 
     fedAvgM = fl.server.strategy.FedAvgM(
-    fraction_fit=0.5,  
-    fraction_evaluate=0.5,  
+    fraction_fit=fraction_fit,  
+    fraction_evaluate=fraction_eval,  
     min_fit_clients=1,  
     min_evaluate_clients=1, 
     min_available_clients=1,
@@ -95,8 +83,8 @@ def setup_strategies(sample_net):
 )
 
     fedAdam = fl.server.strategy.FedAdam(
-    fraction_fit=0.5,  
-    fraction_evaluate=0.5,  
+    fraction_fit=fraction_fit,  
+    fraction_evaluate=fraction_eval,  
     min_fit_clients=1,  
     min_evaluate_clients=1, 
     min_available_clients=1,
@@ -106,8 +94,8 @@ def setup_strategies(sample_net):
 )
 
     fedYogi = fl.server.strategy.FedYogi(
-    fraction_fit=0.5,  
-    fraction_evaluate=0.5,  
+    fraction_fit=fraction_fit,  
+    fraction_evaluate=fraction_eval,  
     min_fit_clients=1,  
     min_evaluate_clients=1, 
     min_available_clients=1,
@@ -118,7 +106,6 @@ def setup_strategies(sample_net):
     
     return (fedAvg, fedProx, fedAvgM, fedAdam, fedYogi)
 
-fedAvg, fedProx, fedAvgM, fedAdam, fedYogi = setup_strategies(sample_net)
 
 # #### CIFAR10 setup: Client FNS ####
 # A couple of client_fns for using with Flower, one for each dataset experiment
@@ -188,13 +175,30 @@ def client_fn_CelebA_IID(cid: str) -> FlowerClient:
     return FlowerClient(net, trainloader, valloader, cid, DEVICE).to_client()
 
 
+def run_FL_for_n_clients(the_client_fn, clients,sample_net):
+    all_metrics = {}
+    for strategy in setup_strategies(sample_net):
+        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"CIFAR10 - {str(strategy)} - IID Distribution")
+        all_metrics[str(strategy)] = experiment.simulate_FL(TRAINING_ROUNDS, clients)
+    
+    return all_metrics
+
 if __name__ == "__main__":
     print(
         f"Training on {DEVICE} using PyTorch {torch.__version__} and Flower {fl.__version__}"
     )
-    #DATA_STORE["CelebA_IID"]= partition_scripts.partition_CelebA_IID(NUM_CLIENTS)
-    DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(NUM_CLIENTS, "CIFAR10")
-    exp_CIFAR10_IID = FedExperiment(client_fn=client_fn_CIFAR10_IID, strategy=fedAvgM, name="CIFAR10 - FedAvgM - IID Distribution")
-    metrics = exp_CIFAR10_IID.simulate_FL(rounds=TRAINING_ROUNDS)
 
+    TRAINING_ROUNDS = 100
 
+    sample_net = VGG7(classes=10, shape=(32,32))
+    clients = 10
+    DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR10")
+    run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net)
+
+    clients = 50
+    DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR10")
+    run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net)
+
+    clients = 100
+    DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR10")
+    run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net)

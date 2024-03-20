@@ -64,7 +64,7 @@ def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
 def fit_config(server_round: int):
     config = {
         "server_round": server_round,
-        "local_epochs": 4,
+        "local_epochs": 1,
     }
     return config
 

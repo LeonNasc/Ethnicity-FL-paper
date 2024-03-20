@@ -143,7 +143,6 @@ def test(net, testloader, DEVICE="cpu", classes=2):
             precision = torcheval.metrics.functional.multiclass_precision(predicted, labels, num_classes= classes)
             recall = torcheval.metrics.functional.multiclass_recall(predicted, labels, num_classes= classes)
             kappa += multiclass_cohen_kappa(predicted, labels, num_classes=classes)
-            print(labels)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
             batches += 1

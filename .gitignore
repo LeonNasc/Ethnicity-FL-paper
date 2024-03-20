@@ -1,5 +1,7 @@
 libraries
 __pycache__
+Datasets
+*.zip
 vm_fl
 vm_fl.pub
 Other resources

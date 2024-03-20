@@ -50,7 +50,7 @@ def IID_setup(num_clients, trainset, testset, save=False, save_path=None):
     print(f'Shape nonIID: {trainset.data[0].shape}')
     partition_size = 1 / num_clients
     lengths = [partition_size] * (num_clients -1)
-    lengths.append(0.999999999 - (partition_size * (num_clients-1))) # Fending against rounding errors
+    lengths.append(0.999999999999 - (partition_size * (num_clients-1))) # Fending against rounding errors
     datasets = random_split(trainset, lengths)
     # Split each partition into train/val and create DataLoader
     trainloaders, valloaders, testloader = make_loaders(num_clients, testset, datasets)
