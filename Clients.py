@@ -33,8 +33,14 @@ class FlowerClient(fl.client.NumPyClient):
     def evaluate(self, parameters, config):
         print(f"[Client {self.cid}] evaluate, config: {config}")
         set_parameters(self.net, parameters)
-        loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
-        return float(loss), len(self.valloader), {"accuracy": float(accuracy), "f1": f1, "roc": roc, "kappa": kappa}
+        loss, accuracy, f1, roc, kappa, precision, recall = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+        return float(loss), len(self.valloader), {"accuracy": float(accuracy), 
+                                                    "f1": f1, 
+                                                    "roc": roc, 
+                                                    "kappa": kappa,
+                                                    "precision": precision,
+                                                    "recall":recall
+                                                }
 
 
 def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:

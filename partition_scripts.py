@@ -51,8 +51,6 @@ def IID_setup(num_clients, trainset, testset, save=False, save_path=None):
     partition_size = 1 / num_clients
     lengths = [partition_size] * (num_clients -1)
     lengths.append(0.999999999 - (partition_size * (num_clients-1))) # Fending against rounding errors
-    print(lengths)
-    print(sum(lengths))
     datasets = random_split(trainset, lengths)
     # Split each partition into train/val and create DataLoader
     trainloaders, valloaders, testloader = make_loaders(num_clients, testset, datasets)
@@ -215,7 +213,8 @@ def load_CelebA():
     else:
         print("Loaded from NPZ")
         train = np.load("./Datasets/ready/celebA/loaded_np/valid.npz")
-        trainset = LoadedCelebA(torch.Tensor(train["xs"][:1000].astype(np.float32)), train["ys"][:1000])
+        trainset = LoadedCelebA(torch.Tensor(train["xs"].astype(np.float32)), train["ys"])
+
         test = np.load("./Datasets/ready/celebA/loaded_np/test.npz")
         testset = LoadedCelebA(torch.Tensor(test["xs"].astype(np.float32)), test["ys"])
 

@@ -129,41 +129,48 @@ def test(net, testloader, DEVICE="cpu", classes=2):
     correct, total, loss, f1, roc, kappa  = 0, 0, 0.0, 0.0, 0.0, 0.0
     net.eval()
     with torch.no_grad():
+        batches = 1
         for images, labels in testloader:
             images, labels = images.to(DEVICE), labels.to(DEVICE)
             outputs = net(images)
 
             loss += criterion(outputs, labels).item()
-            f1 += torcheval.metrics.functional.multiclass_f1_score(outputs, labels, num_classes= classes)
             roc += torcheval.metrics.functional.multiclass_auroc(outputs, labels, num_classes= classes)
-            kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
 
             _, predicted = torch.max(outputs.data, 1)
+
+            f1 += torcheval.metrics.functional.multiclass_f1_score(predicted, labels, num_classes= classes)
+            precision = torcheval.metrics.functional.multiclass_precision(predicted, labels, num_classes= classes)
+            recall = torcheval.metrics.functional.multiclass_recall(predicted, labels, num_classes= classes)
+            kappa += multiclass_cohen_kappa(predicted, labels, num_classes=classes)
+            print(labels)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-    loss /= len(testloader.dataset)
-    f1 /= len(testloader.dataset)
-    roc /= len(testloader.dataset)
-    kappa /= len(testloader.dataset)
+            batches += 1
+
+    loss /= batches
+    kappa /= batches
+    f1 /= batches
+    roc /= batches
     accuracy = correct / total
 
-    return loss, accuracy, f1, roc, kappa
+    return loss, accuracy, f1, roc, kappa, precision, recall
 
 def centralized_training(trainloader, valloader, testloader, DEVICE="cpu", net=None, epochs=5, classes=10):
-    torch.manual_seed(0)
+        torch.manual_seed(0)
 
-    if net is None:
-        net = Net(classes).to(DEVICE)
-    else:
-        net = net.to(DEVICE)
+        if net is None:
+            net = Net(classes).to(DEVICE)
+        else:
+            net = net.to(DEVICE)
 
-    for epoch in range(epochs):
-        train(net, trainloader, 1, DEVICE=DEVICE)
-        loss, accuracy = test(net, valloader)
-        print(f"Epoch {epoch+1}: validation loss {loss}, accuracy {accuracy}")
+        for epoch in range(epochs):
+            train(net, trainloader, 1, DEVICE=DEVICE)
+            loss, accuracy = test(net, valloader)
+            print(f"Epoch {epoch+1}: validation loss {loss}, accuracy {accuracy}")
 
-    loss, accuracy = test(net, testloader, DEVICE=DEVICE)
-    print(f"Final test set performance:\n\tloss {loss}\n\taccuracy {accuracy}")
+        loss, accuracy = test(net, testloader, DEVICE=DEVICE)
+        print(f"Final test set performance:\n\tloss {loss}\n\taccuracy {accuracy}")
 
 
 # VGG Setups 

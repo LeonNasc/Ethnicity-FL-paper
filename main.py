@@ -12,8 +12,8 @@ today = datetime.datetime.today()
 fl.common.logger.configure(identifier="FL Paper Experiment", filename=f"./logs/log_FLWR_{today.timestamp()}.txt")
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-NUM_CLIENTS = 20
-TRAINING_ROUNDS = 40
+NUM_CLIENTS = 50
+TRAINING_ROUNDS = 3
 DATA_STORE = {
     "CIFAR10_IID": None,
     "CIFAR10_NonIID": None,
@@ -36,6 +36,7 @@ class FedExperiment():
         metrics = fl.simulation.start_simulation(
                             client_fn=self.client_fn,
                             num_clients=NUM_CLIENTS,
+                            #num_clients=10,
                             config=fl.server.ServerConfig(num_rounds=rounds),
                             strategy=self.strategy,
                             client_resources=client_resources,
@@ -56,8 +57,8 @@ def  get_resources():
 client_resources = get_resources()
 
 # Needed for initial params in fedAdam and FedYogi
-#sample_net = VGG7(classes=2,shape=(64,64)) #Only for CIFAR10
-sample_net = VGG7(classes=100,shape=(32,32)) #Only for CIFAR10
+sample_net = VGG7(classes=2,shape=(64,64)) #Only for CelebA/FedFaces - Edit class numbers
+#sample_net = VGG7(classes=100,shape=(32,32)) #Only for CIFAR10 - Edit class numbers
 params = get_parameters(sample_net)
 
 def setup_strategies(sample_net):
@@ -191,8 +192,9 @@ if __name__ == "__main__":
     print(
         f"Training on {DEVICE} using PyTorch {torch.__version__} and Flower {fl.__version__}"
     )
-    DATA_STORE["CIFAR10_NonIID"]= partition_scripts.partition_CIFAR_nonIID(NUM_CLIENTS, "CIFAR10")
-    exp_CIFAR10_IID = FedExperiment(client_fn=client_fn_CIFAR10_nonIID, strategy=fedProx, name="CIFAR10 - FedProx - NonIID Distribution")
+    #DATA_STORE["CelebA_IID"]= partition_scripts.partition_CelebA_IID(NUM_CLIENTS)
+    DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(NUM_CLIENTS, "CIFAR10")
+    exp_CIFAR10_IID = FedExperiment(client_fn=client_fn_CIFAR10_IID, strategy=fedAvgM, name="CIFAR10 - FedAvgM - IID Distribution")
     metrics = exp_CIFAR10_IID.simulate_FL(rounds=TRAINING_ROUNDS)
 
 
