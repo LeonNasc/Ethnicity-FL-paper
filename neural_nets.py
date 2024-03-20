@@ -136,7 +136,7 @@ def test(net, testloader, DEVICE="cpu", classes=2):
             loss += criterion(outputs, labels).item()
             f1 += torcheval.metrics.functional.multiclass_f1_score(outputs, labels, num_classes= classes)
             roc += torcheval.metrics.functional.multiclass_auroc(outputs, labels, num_classes= classes)
-            kappa += multiclass_cohen_kappa(preds, target, num_classes=3)
+            kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
 
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
