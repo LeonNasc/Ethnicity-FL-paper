@@ -1,0 +1,436 @@
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:21,327 | main.py:25 | 
+================================================================================
+FedFaces - FedAvg(accept_failures=True) - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:21,330 | app.py:178 | Starting Flower simulation, config: ServerConfig(num_rounds=100, round_timeout=None)
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:23,624 | app.py:213 | Flower VCE: Ray initialized with resources: {'node:__internal_head__': 1.0, 'node:172.18.144.40': 1.0, 'CPU': 6.0, 'memory': 6551828891.0, 'object_store_memory': 3275914444.0}
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:23,625 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.dev/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:23,625 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 2, 'num_gpus': 0}
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:23,635 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 3 actors
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:23,636 | server.py:89 | Initializing global parameters
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:23,636 | server.py:272 | Using initial parameters provided by strategy
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:23,637 | server.py:91 | Evaluating initial parameters
+FL Paper Experiment | INFO flwr 2024-03-20 17:23:23,637 | server.py:104 | FL starting
+FL Paper Experiment | DEBUG flwr 2024-03-20 17:23:23,637 | server.py:222 | fit_round 1: strategy sampled 10 clients (out of 10)
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:33,947 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:33,950 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:33,950 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: df0c54aace9d647d7aa9586d01000000, name=DefaultActor.__init__, pid=212462, memory used=0.25GB) was running was 13.13GB / 13.65GB (0.961212), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: 78b07769dad2d0673466d7f14b030c1e393cbfa0951a31ebc88eeea2) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-78b07769dad2d0673466d7f14b030c1e393cbfa0951a31ebc88eeea2*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	5.52	python3 main.py
+212464	3.54	ray::DefaultActor.run
+212462	0.25	ray::DefaultActor.run
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:33,953 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:33,954 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:33,955 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: df0c54aace9d647d7aa9586d01000000, name=DefaultActor.__init__, pid=212462, memory used=0.25GB) was running was 13.13GB / 13.65GB (0.961212), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: 78b07769dad2d0673466d7f14b030c1e393cbfa0951a31ebc88eeea2) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-78b07769dad2d0673466d7f14b030c1e393cbfa0951a31ebc88eeea2*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	5.52	python3 main.py
+212464	3.54	ray::DefaultActor.run
+212462	0.25	ray::DefaultActor.run
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:37,289 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: 706ffff8b9ff0ef72d6c0a3501000000, name=DefaultActor.__init__, pid=212464, memory used=3.64GB) was running was 13.03GB / 13.65GB (0.953995), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	4.30	python3 main.py
+212464	3.64	ray::DefaultActor.run
+212538	1.31	ray::SPILL_SpillWorker
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+212266	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:37,291 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: 706ffff8b9ff0ef72d6c0a3501000000, name=DefaultActor.__init__, pid=212464, memory used=3.64GB) was running was 13.03GB / 13.65GB (0.953995), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	4.30	python3 main.py
+212464	3.64	ray::DefaultActor.run
+212538	1.31	ray::SPILL_SpillWorker
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+212266	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:37,291 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:38,393 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:38,546 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:38,547 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:39,764 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: 706ffff8b9ff0ef72d6c0a3501000000, name=DefaultActor.__init__, pid=212464, memory used=3.64GB) was running was 13.03GB / 13.65GB (0.953995), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	4.30	python3 main.py
+212464	3.64	ray::DefaultActor.run
+212538	1.31	ray::SPILL_SpillWorker
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+212266	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:39,764 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: 706ffff8b9ff0ef72d6c0a3501000000, name=DefaultActor.__init__, pid=212464, memory used=3.64GB) was running was 13.03GB / 13.65GB (0.953995), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	4.30	python3 main.py
+212464	3.64	ray::DefaultActor.run
+212538	1.31	ray::SPILL_SpillWorker
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+212266	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:39,765 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:39,766 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: 706ffff8b9ff0ef72d6c0a3501000000, name=DefaultActor.__init__, pid=212464, memory used=3.64GB) was running was 13.03GB / 13.65GB (0.953995), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	4.30	python3 main.py
+212464	3.64	ray::DefaultActor.run
+212538	1.31	ray::SPILL_SpillWorker
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+212266	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:39,766 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: e910a4350df6c40d20def9a301000000, name=DefaultActor.__init__, pid=212463, memory used=2.20GB) was running was 13.04GB / 13.65GB (0.955027), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-a9093044b83848e7f04d9d70fa15da297a28fa4e33012f94d6d79a54*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	3.72	python3 main.py
+212464	3.29	ray::DefaultActor.run
+212463	2.20	ray::DefaultActor.run
+212462	0.05	ray::DefaultActor
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:39,768 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: 706ffff8b9ff0ef72d6c0a3501000000, name=DefaultActor.__init__, pid=212464, memory used=3.64GB) was running was 13.03GB / 13.65GB (0.953995), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-f303c3a5d74c176ba5cc4f4de3081d077b41b9deaa101cbafa9b8d81*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	4.30	python3 main.py
+212464	3.64	ray::DefaultActor.run
+212538	1.31	ray::SPILL_SpillWorker
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+212266	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/raylet/raylet --raylet_socket_name=/...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:39,768 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2526, in get
+    raise value
+ray.exceptions.OutOfMemoryError: Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: df0c54aace9d647d7aa9586d01000000, name=DefaultActor.__init__, pid=212462, memory used=0.25GB) was running was 13.13GB / 13.65GB (0.961212), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: 78b07769dad2d0673466d7f14b030c1e393cbfa0951a31ebc88eeea2) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-78b07769dad2d0673466d7f14b030c1e393cbfa0951a31ebc88eeea2*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	5.52	python3 main.py
+212464	3.54	ray::DefaultActor.run
+212462	0.25	ray::DefaultActor.run
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+
+FL Paper Experiment | ERROR flwr 2024-03-20 17:24:39,769 | ray_client_proxy.py:162 | Task was killed due to the node running low on memory.
+Memory on the node (IP: 172.18.144.40, ID: 0b2fb1262e4cd109c7dbc15409ef90d668938deee22fbed60f5c9c12) where the task (actor ID: df0c54aace9d647d7aa9586d01000000, name=DefaultActor.__init__, pid=212462, memory used=0.25GB) was running was 13.13GB / 13.65GB (0.961212), which exceeds the memory usage threshold of 0.95. Ray killed this worker (ID: 78b07769dad2d0673466d7f14b030c1e393cbfa0951a31ebc88eeea2) because it was the most recently scheduled task; to see more information about memory usage on this node, use `ray logs raylet.out -ip 172.18.144.40`. To see the logs of the worker, use `ray logs worker-78b07769dad2d0673466d7f14b030c1e393cbfa0951a31ebc88eeea2*out -ip 172.18.144.40. Top 10 memory users:
+PID	MEM(GB)	COMMAND
+212209	5.52	python3 main.py
+212464	3.54	ray::DefaultActor.run
+212462	0.25	ray::DefaultActor.run
+212296	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/agent.py --node-ip-...
+212538	0.04	ray::IDLE_SpillWorker
+212243	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/autoscaler/_private/monitor.p...
+212556	0.04	ray::IDLE_SpillWorker
+212244	0.04	/usr/bin/python3 /home/leon/.local/lib/python3.10/site-packages/ray/dashboard/dashboard.py --host=12...
+212272	0.04	/usr/bin/python3 -u /home/leon/.local/lib/python3.10/site-packages/ray/_private/log_monitor.py --log...
+212218	0.03	/home/leon/.local/lib/python3.10/site-packages/ray/core/src/ray/gcs/gcs_server --log_dir=/tmp/ray/se...
+Refer to the documentation on how to address the out of memory issue: https://docs.ray.io/en/latest/ray-core/scheduling/ray-oom-prevention.html. Consider provisioning more memory on this node or reducing task parallelism by requesting more CPUs per task. Set max_restarts and max_task_retries to enable retry when the task crashes due to OOM. To adjust the kill threshold, set the environment variable `RAY_memory_usage_threshold` when starting Ray. To disable worker killing, set the environment variable `RAY_memory_monitor_refresh_ms` to zero.
+FL Paper Experiment | DEBUG flwr 2024-03-20 17:24:39,772 | server.py:236 | fit_round 1 received 0 results and 10 failures
+FL Paper Experiment | DEBUG flwr 2024-03-20 17:24:39,773 | server.py:173 | evaluate_round 1: strategy sampled 10 clients (out of 10)

@@ -213,6 +213,7 @@ def load_CelebA():
     else:
         print("Loaded from NPZ")
         train = np.load("./Datasets/ready/celebA/loaded_np/valid.npz")
+        train["xs"] = [resize_images(x) for x in train["xs"]]
         trainset = LoadedCelebA(torch.Tensor(train["xs"].astype(np.float32)), train["ys"])
 
         test = np.load("./Datasets/ready/celebA/loaded_np/test.npz")
@@ -247,10 +248,10 @@ def convert_to_3d_with_repeat(array_2d):
 def load_fedfaces(undersample=True):
     data_all = [np.load(f) for f in glob.glob("./Datasets/ready/prepared_data/regions/*.npz")]
 
-    merged_data = {"X": [convert_to_3d_with_repeat(x) for x in data_all[0]["X"]], "Y": data_all[0]["Y"]} 
+    merged_data = {"X": [resize_images(convert_to_3d_with_repeat(x)) for x in data_all[0]["X"]], "Y": data_all[0]["Y"]} 
 
     for data in data_all[1:]:
-        xs = np.concatenate([merged_data["X"], [convert_to_3d_with_repeat(x) for x in data["X"]]])
+        xs = np.concatenate([merged_data["X"], [resize_images(convert_to_3d_with_repeat(x)) for x in data["X"]]])
         ys = np.concatenate([merged_data["Y"], data["Y"]])
         merged_data["X"] = xs
         merged_data["Y"] = ys
@@ -292,6 +293,17 @@ def undersample_fedfaces(merged_data):
 
     return data
 
+def resize_images(image):
+
+    input_size = 64 #We're going to resize fedfaces and celebA from 64x64 to 32x32
+    output_size = 32
+
+    bin_size = input_size // output_size
+    small_image = image.reshape((output_size, bin_size,
+                               output_size, bin_size, 3)).max(3).max(1)
+
+    return small_image
+
 
 class FedFaces(torch.utils.data.Dataset):
 
@@ -300,6 +312,7 @@ class FedFaces(torch.utils.data.Dataset):
                     ys,
                     transform: Optional[Callable] = None,
                     target_transform: Optional[Callable] = None):
+
 
         self.data = xs
         self.targets = ys

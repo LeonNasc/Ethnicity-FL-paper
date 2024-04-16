@@ -1,0 +1,11 @@
+FL Paper Experiment | INFO flwr 2024-04-01 10:02:31,615 | main.py:26 | 
+================================================================================
+FedFaces - FedProx(accept_failures=True) - 25 clients - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-04-01 10:02:31,618 | app.py:178 | Starting Flower simulation, config: ServerConfig(num_rounds=100, round_timeout=None)
+FL Paper Experiment | INFO flwr 2024-04-01 10:02:33,938 | app.py:213 | Flower VCE: Ray initialized with resources: {'node:172.18.144.40': 1.0, 'CPU': 12.0, 'node:__internal_head__': 1.0, 'memory': 9042102683.0, 'object_store_memory': 4521051340.0}
+FL Paper Experiment | INFO flwr 2024-04-01 10:02:33,939 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.dev/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-04-01 10:02:33,939 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 10, 'num_gpus': 0, 'memory': 3221225472}
+FL Paper Experiment | INFO flwr 2024-04-01 10:02:33,946 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 1 actors
+FL Paper Experiment | INFO flwr 2024-04-01 10:02:33,947 | server.py:89 | Initializing global parameters
+FL Paper Experiment | INFO flwr 2024-04-01 10:02:33,947 | server.py:276 | Requesting initial parameters from one random client

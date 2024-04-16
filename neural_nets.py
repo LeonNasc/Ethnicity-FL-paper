@@ -1,8 +1,10 @@
 import torch
+import datetime
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import torcheval
+import torcheval.metrics
 from torchmetrics.functional.classification import multiclass_cohen_kappa
 
 
@@ -38,7 +40,9 @@ class _VGG(nn.Module):
         self.layers = _make_layers(cfg)
         self.classes = classes
         #print(f'fc1 expects: {2*shape[0]*shape[1]}')
-        self.fc1 = nn.Linear(2*shape[0]*shape[1], 4096)  
+        num_pools = len([x for x in cfg if x == "M"])
+        shape = int(shape[0]*shape[1] * (512*(1/4)**num_pools))
+        self.fc1 = nn.Linear(shape, 4096)  
         self.fc2 = nn.Linear(4096, 4096)
         self.fc3 = nn.Linear(4096, classes)
         self.relu = nn.ReLU()
@@ -48,7 +52,6 @@ class _VGG(nn.Module):
         
         y = self.layers(x)
         y = y.view(y.size(0), -1)  # Flatten the input features
-        #print(f'conv2d gives: {y.shape}')
         y = self.fc1(y)
         y = self.relu(y)
         y = self.dropout(y)
@@ -165,11 +168,18 @@ def centralized_training(trainloader, valloader, testloader, DEVICE="cpu", net=N
 
         for epoch in range(epochs):
             train(net, trainloader, 1, DEVICE=DEVICE)
-            loss, accuracy = test(net, valloader)
-            print(f"Epoch {epoch+1}: validation loss {loss}, accuracy {accuracy}")
+            print(DEVICE)
+            metrics = test(net, valloader, classes=classes, DEVICE=DEVICE)
 
-        loss, accuracy = test(net, testloader, DEVICE=DEVICE)
-        print(f"Final test set performance:\n\tloss {loss}\n\taccuracy {accuracy}")
+            # Get the current date and time
+            current_time = datetime.datetime.now()
+            print(f"Current time: {current_time.strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"Epoch {epoch+1}: validation loss {metrics[0]}, accuracy {metrics[1]}")
+
+        metrics = test(net, testloader, DEVICE=DEVICE, classes=classes)
+        print(f"Final test set performance:\n\tloss {metrics[0]}\n\taccuracy {metrics[1]}")
+
+        return metrics
 
 
 # VGG Setups 
@@ -185,23 +195,146 @@ _cfg = {
 def VGG7(classes, shape=(32,32)):
     return _VGG('VGG7', classes, shape)
     
-def VGG9(classes):
-    return _VGG('VGG9', classes)
+def VGG9(classes, shape=(32,32)):
+    return _VGG('VGG9', classes, shape)
 
-def VGG11(classes):
-    return _VGG('VGG11', classes)
+def VGG11(classes, shape=(32,32)):
+    return _VGG('VGG11', classes, shape)
 
-
-def VGG13(classes):
-    return _VGG('VGG13', classes)
-
+def VGG13(classes, shape=(32,32)):
+    return _VGG('VGG13', classes, shape)
 
 def VGG16(classes, shape=(32,32)):
     return _VGG('VGG16', classes, shape)
 
+def VGG19(classes, shape=(32,32)):
+    return _VGG('VGG19', classes, shape)
 
-def VGG19(classes):
-    return _VGG('VGG19', classes)
+##################################################
+# Resnet50 network
+##################################################
+class IdentityBlock(nn.Module):
+    def __init__(self, in_channels, out_channels, stride=1):
+        super(IdentityBlock, self).__init__()
+
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+        
+        self.conv3 = nn.Conv2d(out_channels, out_channels * 4, kernel_size=1)
+        self.bn3 = nn.BatchNorm2d(out_channels * 4)
+        
+        self.relu = nn.ReLU(inplace=True)
+        
+        self.shortcut = nn.Sequential()
+        if stride != 1 or in_channels != out_channels * 4:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels * 4, kernel_size=1, stride=stride),
+                nn.BatchNorm2d(out_channels * 4)
+            )
+
+    def forward(self, x):
+        identity = x
+        
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+        
+        out = self.conv2(out)
+        out = self.bn2(out)
+        out = self.relu(out)
+        
+        out = self.conv3(out)
+        out = self.bn3(out)
+        
+        out += self.shortcut(identity)
+        out = self.relu(out)
+        
+        return out
+
+class ConvBlock(nn.Module):
+    def __init__(self, in_channels, out_channels, stride=1):
+        super(ConvBlock, self).__init__()
+
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+        
+        self.conv3 = nn.Conv2d(out_channels, out_channels * 4, kernel_size=1)
+        self.bn3 = nn.BatchNorm2d(out_channels * 4)
+        
+        self.relu = nn.ReLU(inplace=True)
+        
+        self.shortcut = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels * 4, kernel_size=1, stride=stride),
+            nn.BatchNorm2d(out_channels * 4)
+        )
+
+    def forward(self, x):
+        identity = x
+        
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+        
+        out = self.conv2(out)
+        out = self.bn2(out)
+        out = self.relu(out)
+        
+        out = self.conv3(out)
+        out = self.bn3(out)
+        
+        identity = self.shortcut(identity)
+        
+        out += identity
+        out = self.relu(out)
+        
+        return out
+
+class ResNet50(nn.Module):
+    def __init__(self, num_classes=1000):
+        super(ResNet50, self).__init__()
+
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3)
+        self.bn1 = nn.BatchNorm2d(64)
+        self.relu = nn.ReLU(inplace=True)
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+
+        self.layer1 = self._make_layer(64, 3, stride=1)
+        self.layer2 = self._make_layer(128, 4, stride=2)
+        self.layer3 = self._make_layer(256, 6, stride=2)
+        self.layer4 = self._make_layer(512, 3, stride=2)
+
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.fc = nn.Linear(512 * 4, num_classes)
+
+    def _make_layer(self, out_channels, blocks, stride=1):
+        layers = []
+        layers.append(ConvBlock(64, out_channels, stride=stride))
+        for _ in range(1, blocks):
+            layers.append(IdentityBlock(out_channels, out_channels))
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.maxpool(x)
+
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
+        x = self.layer4(x)
+
+        x = self.avgpool(x)
+        x = torch.flatten(x, 1)
+        x = self.fc(x)
+        return x
+
 
 ######################################## 
 #   Neural Network Parameter Funcionality for FL
@@ -212,7 +345,7 @@ def get_parameters(net) -> List[np.ndarray]:
     return [val.cpu().numpy() for _, val in net.state_dict().items()]
 
 def set_parameters(net, parameters: List[np.ndarray]):
-    # Updates the given net with the given parameters
+    #Arturas Kairys Updates the given net with the given parameters
     # (retruns nothing as it will just modify the net object)
     params_dict = zip(net.state_dict().keys(), parameters)
     state_dict = OrderedDict({k:torch.Tensor(v) for k, v in params_dict if len(v.shape) > 0})

@@ -1,0 +1,167 @@
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:47,968 | main.py:25 | 
+================================================================================
+CIFAR100 - FedAvg(accept_failures=True) - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:47,970 | app.py:178 | Starting Flower simulation, config: ServerConfig(num_rounds=100, round_timeout=None)
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:51,049 | app.py:213 | Flower VCE: Ray initialized with resources: {'node:__internal_head__': 1.0, 'node:192.168.42.95': 1.0, 'object_store_memory': 4619183308.0, 'memory': 9238366619.0, 'CPU': 4.0}
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:51,049 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.dev/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:51,049 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 4, 'num_gpus': 0}
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:51,073 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 1 actors
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:51,074 | server.py:89 | Initializing global parameters
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:51,074 | server.py:272 | Using initial parameters provided by strategy
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:51,074 | server.py:91 | Evaluating initial parameters
+FL Paper Experiment | INFO flwr 2024-03-20 15:30:51,074 | server.py:104 | FL starting
+FL Paper Experiment | DEBUG flwr 2024-03-20 15:30:51,074 | server.py:222 | fit_round 1: strategy sampled 10 clients (out of 10)
+FL Paper Experiment | ERROR flwr 2024-03-20 15:31:59,052 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+                                    ^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+                                           ^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID
+    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'CIFAR10_IID'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 3 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 72, in run\n    client = check_clientfn_returns_client(client_fn(cid))\n                                           ^^^^^^^^^^^^^^\n  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID\n    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]\n                                  ~~~~~~~~~~^^^^^^^^^^^^^^^\nKeyError: \'CIFAR10_IID\'\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-20 15:31:59,053 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+                                           ^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID
+    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'CIFAR10_IID'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 3 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 72, in run\n    client = check_clientfn_returns_client(client_fn(cid))\n                                           ^^^^^^^^^^^^^^\n  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID\n    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]\n                                  ~~~~~~~~~~^^^^^^^^^^^^^^^\nKeyError: \'CIFAR10_IID\'\n',)
+FL Paper Experiment | ERROR flwr 2024-03-20 15:32:33,848 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+                                    ^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+                                           ^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID
+    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'CIFAR10_IID'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 7 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 72, in run\n    client = check_clientfn_returns_client(client_fn(cid))\n                                           ^^^^^^^^^^^^^^\n  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID\n    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]\n                                  ~~~~~~~~~~^^^^^^^^^^^^^^^\nKeyError: \'CIFAR10_IID\'\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-20 15:32:33,848 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+                                           ^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID
+    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'CIFAR10_IID'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 7 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 72, in run\n    client = check_clientfn_returns_client(client_fn(cid))\n                                           ^^^^^^^^^^^^^^\n  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID\n    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]\n                                  ~~~~~~~~~~^^^^^^^^^^^^^^^\nKeyError: \'CIFAR10_IID\'\n',)
+FL Paper Experiment | ERROR flwr 2024-03-20 15:32:39,562 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+                                    ^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+                                           ^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID
+    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'CIFAR10_IID'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 2 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 72, in run\n    client = check_clientfn_returns_client(client_fn(cid))\n                                           ^^^^^^^^^^^^^^\n  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID\n    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]\n                                  ~~~~~~~~~~^^^^^^^^^^^^^^^\nKeyError: \'CIFAR10_IID\'\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-20 15:32:39,563 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+                                           ^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID
+    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'CIFAR10_IID'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=21349, ip=192.168.42.95, actor_id=c0dbdbcf1834b7d147cb656f01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fbf469295d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 2 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 72, in run\n    client = check_clientfn_returns_client(client_fn(cid))\n                                           ^^^^^^^^^^^^^^\n  File "/home/debian/Ethnicity-FL-paper/main.py", line 119, in client_fn_CIFAR10_IID\n    trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]\n                                  ~~~~~~~~~~^^^^^^^^^^^^^^^\nKeyError: \'CIFAR10_IID\'\n',)

@@ -1,0 +1,400 @@
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:22,937 | main.py:25 | 
+================================================================================
+CIFAR10 - FedAvg(accept_failures=True) - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:22,939 | app.py:178 | Starting Flower simulation, config: ServerConfig(num_rounds=100, round_timeout=None)
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:25,267 | app.py:213 | Flower VCE: Ray initialized with resources: {'node:__internal_head__': 1.0, 'node:172.18.144.40': 1.0, 'CPU': 6.0, 'memory': 6860552603.0, 'object_store_memory': 3430276300.0}
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:25,267 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.dev/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:25,268 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 4, 'num_gpus': 0}
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:25,278 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 1 actors
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:25,279 | server.py:89 | Initializing global parameters
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:25,279 | server.py:272 | Using initial parameters provided by strategy
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:25,279 | server.py:91 | Evaluating initial parameters
+FL Paper Experiment | INFO flwr 2024-03-20 14:48:25,280 | server.py:104 | FL starting
+FL Paper Experiment | DEBUG flwr 2024-03-20 14:48:25,280 | server.py:222 | fit_round 1: strategy sampled 5 clients (out of 5)
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:28,755 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 0 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:28,756 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 0 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:29,727 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 3 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:29,728 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 3 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:30,680 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 2 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:30,680 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 2 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:31,599 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 1 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:31,600 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 1 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:31,816 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 4 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:31,817 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit
+    return maybe_call_fit(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit
+    return client.fit(fit_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 4 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 207, in fit\n    return maybe_call_fit(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 234, in maybe_call_fit\n    return client.fit(fit_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 238, in _fit\n    results = self.numpy_client.fit(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 29, in fit\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+FL Paper Experiment | DEBUG flwr 2024-03-20 14:48:31,818 | server.py:236 | fit_round 1 received 0 results and 5 failures
+FL Paper Experiment | DEBUG flwr 2024-03-20 14:48:31,818 | server.py:173 | evaluate_round 1: strategy sampled 5 clients (out of 5)
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:33,307 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 35, in evaluate
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 4 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 35, in evaluate\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-20 14:48:33,308 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 35, in evaluate
+    set_parameters(self.net, parameters)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters
+    net.load_state_dict(state_dict, strict=True)
+  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for _VGG:
+	size mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).
+	size mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).
+	size mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=210806, ip=172.18.144.40, actor_id=3b89df4544234d54cebfb82c01000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7fcf18d167d0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 4 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 35, in evaluate\n    set_parameters(self.net, parameters)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 220, in set_parameters\n    net.load_state_dict(state_dict, strict=True)\n  File "/home/leon/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict\n    raise RuntimeError(\'Error(s) in loading state_dict for {}:\\n\\t{}\'.format(\nRuntimeError: Error(s) in loading state_dict for _VGG:\n\tsize mismatch for fc1.weight: copying a param with shape torch.Size([4096, 8192]) from checkpoint, the shape in current model is torch.Size([4096, 2048]).\n\tsize mismatch for fc3.weight: copying a param with shape torch.Size([2, 4096]) from checkpoint, the shape in current model is torch.Size([10, 4096]).\n\tsize mismatch for fc3.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([10]).\n',)

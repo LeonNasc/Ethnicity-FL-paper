@@ -1,0 +1,225 @@
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:21,054 | main.py:35 | 
+================================================================================
+CIFAR10 - FedProx - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:21,055 | app.py:178 | Starting Flower simulation, config: ServerConfig(num_rounds=50, round_timeout=None)
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:23,100 | app.py:213 | Flower VCE: Ray initialized with resources: {'CPU': 4.0, 'node:__internal_head__': 1.0, 'node:172.18.144.40': 1.0, 'object_store_memory': 3303043891.0, 'memory': 6606087783.0}
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:23,101 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.dev/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:23,102 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 2, 'num_gpus': 0}
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:23,110 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 2 actors
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:23,111 | server.py:89 | Initializing global parameters
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:23,111 | server.py:276 | Requesting initial parameters from one random client
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:25,220 | server.py:280 | Received initial parameters from one random client
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:25,221 | server.py:91 | Evaluating initial parameters
+FL Paper Experiment | INFO flwr 2024-03-18 16:15:25,222 | server.py:104 | FL starting
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:15:25,222 | server.py:222 | fit_round 1: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:21:11,901 | server.py:236 | fit_round 1 received 10 results and 0 failures
+FL Paper Experiment | WARNING flwr 2024-03-18 16:21:12,935 | fedavg.py:250 | No fit_metrics_aggregation_fn provided
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:21:12,938 | server.py:173 | evaluate_round 1: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:21:19,978 | server.py:187 | evaluate_round 1 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:21:19,979 | server.py:222 | fit_round 2: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:27:26,956 | server.py:236 | fit_round 2 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:27:27,751 | server.py:173 | evaluate_round 2: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:27:34,714 | server.py:187 | evaluate_round 2 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:27:34,715 | server.py:222 | fit_round 3: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:33:38,430 | server.py:236 | fit_round 3 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:33:39,226 | server.py:173 | evaluate_round 3: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:33:46,220 | server.py:187 | evaluate_round 3 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:33:46,220 | server.py:222 | fit_round 4: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:39:38,833 | server.py:236 | fit_round 4 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:39:39,710 | server.py:173 | evaluate_round 4: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:39:46,683 | server.py:187 | evaluate_round 4 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:39:46,684 | server.py:222 | fit_round 5: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:45:40,679 | server.py:236 | fit_round 5 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:45:41,732 | server.py:173 | evaluate_round 5: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:45:48,673 | server.py:187 | evaluate_round 5 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:45:48,674 | server.py:222 | fit_round 6: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:51:42,090 | server.py:236 | fit_round 6 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:51:42,842 | server.py:173 | evaluate_round 6: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:51:49,707 | server.py:187 | evaluate_round 6 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:51:49,708 | server.py:222 | fit_round 7: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:57:55,639 | server.py:236 | fit_round 7 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:57:56,517 | server.py:173 | evaluate_round 7: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:58:03,418 | server.py:187 | evaluate_round 7 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 16:58:03,419 | server.py:222 | fit_round 8: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:04:00,930 | server.py:236 | fit_round 8 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:04:01,767 | server.py:173 | evaluate_round 8: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:04:09,920 | server.py:187 | evaluate_round 8 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:04:09,921 | server.py:222 | fit_round 9: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:10:17,829 | server.py:236 | fit_round 9 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:10:18,674 | server.py:173 | evaluate_round 9: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:10:25,816 | server.py:187 | evaluate_round 9 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:10:25,817 | server.py:222 | fit_round 10: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:16:23,920 | server.py:236 | fit_round 10 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:16:24,782 | server.py:173 | evaluate_round 10: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:16:31,857 | server.py:187 | evaluate_round 10 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:16:31,857 | server.py:222 | fit_round 11: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:22:38,529 | server.py:236 | fit_round 11 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:22:39,389 | server.py:173 | evaluate_round 11: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:22:46,230 | server.py:187 | evaluate_round 11 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:22:46,231 | server.py:222 | fit_round 12: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:28:54,521 | server.py:236 | fit_round 12 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:28:55,335 | server.py:173 | evaluate_round 12: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:29:02,523 | server.py:187 | evaluate_round 12 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:29:02,523 | server.py:222 | fit_round 13: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:35:04,572 | server.py:236 | fit_round 13 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:35:05,376 | server.py:173 | evaluate_round 13: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:35:12,251 | server.py:187 | evaluate_round 13 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:35:12,252 | server.py:222 | fit_round 14: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:41:15,179 | server.py:236 | fit_round 14 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:41:15,932 | server.py:173 | evaluate_round 14: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:41:22,929 | server.py:187 | evaluate_round 14 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:41:22,929 | server.py:222 | fit_round 15: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:47:27,761 | server.py:236 | fit_round 15 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:47:28,577 | server.py:173 | evaluate_round 15: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:47:35,560 | server.py:187 | evaluate_round 15 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:47:35,561 | server.py:222 | fit_round 16: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:53:43,321 | server.py:236 | fit_round 16 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:53:43,984 | server.py:173 | evaluate_round 16: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:53:50,942 | server.py:187 | evaluate_round 16 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:53:50,943 | server.py:222 | fit_round 17: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 17:59:59,926 | server.py:236 | fit_round 17 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:00:00,853 | server.py:173 | evaluate_round 17: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:00:08,151 | server.py:187 | evaluate_round 17 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:00:08,152 | server.py:222 | fit_round 18: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:06:15,147 | server.py:236 | fit_round 18 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:06:15,833 | server.py:173 | evaluate_round 18: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:06:22,827 | server.py:187 | evaluate_round 18 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:06:22,828 | server.py:222 | fit_round 19: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:12:30,072 | server.py:236 | fit_round 19 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:12:30,765 | server.py:173 | evaluate_round 19: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:12:37,783 | server.py:187 | evaluate_round 19 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:12:37,784 | server.py:222 | fit_round 20: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:18:44,420 | server.py:236 | fit_round 20 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:18:45,046 | server.py:173 | evaluate_round 20: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:18:52,165 | server.py:187 | evaluate_round 20 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:18:52,165 | server.py:222 | fit_round 21: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:25:04,600 | server.py:236 | fit_round 21 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:25:05,329 | server.py:173 | evaluate_round 21: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:25:12,595 | server.py:187 | evaluate_round 21 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:25:12,596 | server.py:222 | fit_round 22: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:31:21,206 | server.py:236 | fit_round 22 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:31:21,990 | server.py:173 | evaluate_round 22: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:31:29,151 | server.py:187 | evaluate_round 22 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:31:29,151 | server.py:222 | fit_round 23: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:37:37,861 | server.py:236 | fit_round 23 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:37:38,579 | server.py:173 | evaluate_round 23: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:37:45,561 | server.py:187 | evaluate_round 23 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:37:45,562 | server.py:222 | fit_round 24: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:43:56,892 | server.py:236 | fit_round 24 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:43:57,614 | server.py:173 | evaluate_round 24: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:44:04,754 | server.py:187 | evaluate_round 24 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:44:04,754 | server.py:222 | fit_round 25: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:50:11,352 | server.py:236 | fit_round 25 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:50:12,007 | server.py:173 | evaluate_round 25: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:50:18,947 | server.py:187 | evaluate_round 25 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:50:18,948 | server.py:222 | fit_round 26: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:56:29,063 | server.py:236 | fit_round 26 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:56:29,758 | server.py:173 | evaluate_round 26: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:56:36,925 | server.py:187 | evaluate_round 26 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 18:56:36,925 | server.py:222 | fit_round 27: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:02:44,424 | server.py:236 | fit_round 27 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:02:45,136 | server.py:173 | evaluate_round 27: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:02:52,137 | server.py:187 | evaluate_round 27 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:02:52,138 | server.py:222 | fit_round 28: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:09:01,323 | server.py:236 | fit_round 28 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:09:02,072 | server.py:173 | evaluate_round 28: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:09:09,078 | server.py:187 | evaluate_round 28 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:09:09,078 | server.py:222 | fit_round 29: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:15:16,835 | server.py:236 | fit_round 29 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:15:17,562 | server.py:173 | evaluate_round 29: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:15:24,777 | server.py:187 | evaluate_round 29 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:15:24,778 | server.py:222 | fit_round 30: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:21:32,622 | server.py:236 | fit_round 30 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:21:33,315 | server.py:173 | evaluate_round 30: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:21:40,157 | server.py:187 | evaluate_round 30 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:21:40,158 | server.py:222 | fit_round 31: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:27:40,131 | server.py:236 | fit_round 31 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:27:40,838 | server.py:173 | evaluate_round 31: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:27:47,696 | server.py:187 | evaluate_round 31 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:27:47,696 | server.py:222 | fit_round 32: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:33:53,092 | server.py:236 | fit_round 32 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:33:53,808 | server.py:173 | evaluate_round 32: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:34:00,902 | server.py:187 | evaluate_round 32 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:34:00,903 | server.py:222 | fit_round 33: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:40:08,353 | server.py:236 | fit_round 33 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:40:09,080 | server.py:173 | evaluate_round 33: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:40:16,187 | server.py:187 | evaluate_round 33 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:40:16,187 | server.py:222 | fit_round 34: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:46:21,360 | server.py:236 | fit_round 34 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:46:22,013 | server.py:173 | evaluate_round 34: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:46:28,581 | server.py:187 | evaluate_round 34 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:46:28,581 | server.py:222 | fit_round 35: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:52:30,581 | server.py:236 | fit_round 35 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:52:31,290 | server.py:173 | evaluate_round 35: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:52:38,315 | server.py:187 | evaluate_round 35 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:52:38,316 | server.py:222 | fit_round 36: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:58:48,104 | server.py:236 | fit_round 36 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:58:48,869 | server.py:173 | evaluate_round 36: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:58:55,958 | server.py:187 | evaluate_round 36 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 19:58:55,959 | server.py:222 | fit_round 37: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:05:06,717 | server.py:236 | fit_round 37 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:05:07,402 | server.py:173 | evaluate_round 37: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:05:14,321 | server.py:187 | evaluate_round 37 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:05:14,322 | server.py:222 | fit_round 38: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:11:29,229 | server.py:236 | fit_round 38 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:11:29,953 | server.py:173 | evaluate_round 38: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:11:36,960 | server.py:187 | evaluate_round 38 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:11:36,960 | server.py:222 | fit_round 39: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:17:55,808 | server.py:236 | fit_round 39 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:17:56,462 | server.py:173 | evaluate_round 39: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:18:03,639 | server.py:187 | evaluate_round 39 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:18:03,640 | server.py:222 | fit_round 40: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:24:22,072 | server.py:236 | fit_round 40 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:24:22,902 | server.py:173 | evaluate_round 40: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:24:30,045 | server.py:187 | evaluate_round 40 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:24:30,046 | server.py:222 | fit_round 41: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:30:52,339 | server.py:236 | fit_round 41 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:30:53,061 | server.py:173 | evaluate_round 41: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:31:00,117 | server.py:187 | evaluate_round 41 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:31:00,118 | server.py:222 | fit_round 42: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:37:20,795 | server.py:236 | fit_round 42 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:37:21,471 | server.py:173 | evaluate_round 42: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:37:28,603 | server.py:187 | evaluate_round 42 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:37:28,604 | server.py:222 | fit_round 43: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:43:52,875 | server.py:236 | fit_round 43 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:43:53,494 | server.py:173 | evaluate_round 43: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:44:00,574 | server.py:187 | evaluate_round 43 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:44:00,574 | server.py:222 | fit_round 44: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:50:27,542 | server.py:236 | fit_round 44 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:50:28,266 | server.py:173 | evaluate_round 44: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:50:35,314 | server.py:187 | evaluate_round 44 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:50:35,314 | server.py:222 | fit_round 45: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:57:04,681 | server.py:236 | fit_round 45 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:57:05,322 | server.py:173 | evaluate_round 45: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:57:12,523 | server.py:187 | evaluate_round 45 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 20:57:12,524 | server.py:222 | fit_round 46: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:03:41,664 | server.py:236 | fit_round 46 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:03:42,465 | server.py:173 | evaluate_round 46: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:03:49,535 | server.py:187 | evaluate_round 46 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:03:49,536 | server.py:222 | fit_round 47: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:10:19,505 | server.py:236 | fit_round 47 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:10:20,313 | server.py:173 | evaluate_round 47: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:10:27,614 | server.py:187 | evaluate_round 47 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:10:27,615 | server.py:222 | fit_round 48: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:16:55,591 | server.py:236 | fit_round 48 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:16:56,317 | server.py:173 | evaluate_round 48: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:17:03,460 | server.py:187 | evaluate_round 48 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:17:03,461 | server.py:222 | fit_round 49: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:23:32,191 | server.py:236 | fit_round 49 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:23:32,891 | server.py:173 | evaluate_round 49: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:23:40,089 | server.py:187 | evaluate_round 49 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:23:40,089 | server.py:222 | fit_round 50: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:30:12,426 | server.py:236 | fit_round 50 received 10 results and 0 failures
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:30:13,084 | server.py:173 | evaluate_round 50: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-18 21:30:20,079 | server.py:187 | evaluate_round 50 received 10 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-03-18 21:30:20,079 | server.py:153 | FL finished in 18894.856977281997
+FL Paper Experiment | INFO flwr 2024-03-18 21:30:20,083 | app.py:226 | app_fit: losses_distributed [(1, 0.03687019394136244), (2, 0.03683685913085938), (3, 0.0344707903415926), (4, 0.0332779390335083), (5, 0.03272929439544678), (6, 0.03287831001281739), (7, 0.03247581514235466), (8, 0.03156515544153029), (9, 0.03158676990693615), (10, 0.03118596823215485), (11, 0.0300432583808899), (12, 0.029467397022247314), (13, 0.028933369350433353), (14, 0.02897293014526367), (15, 0.028495701408386233), (16, 0.028138730144500735), (17, 0.028369259071350093), (18, 0.027661020183563235), (19, 0.027802043421806828), (20, 0.026492632484436035), (21, 0.026705253961778454), (22, 0.02663232326507568), (23, 0.025923790931701662), (24, 0.02568604552745819), (25, 0.02525152832538851), (26, 0.02383415339531437), (27, 0.023375851497342507), (28, 0.02329524860997354), (29, 0.022317632702089127), (30, 0.022475266933441162), (31, 0.022764229458378207), (32, 0.021209071254730226), (33, 0.022627127223630104), (34, 0.021273966884613037), (35, 0.020335590744018556), (36, 0.02075982551574707), (37, 0.021315673112869263), (38, 0.019599316562375714), (39, 0.019880033683776853), (40, 0.019520451927185056), (41, 0.019154177188873293), (42, 0.01954209852218628), (43, 0.019458799237589683), (44, 0.019047630747672052), (45, 0.019099177646636968), (46, 0.019113297469385206), (47, 0.016885148149921047), (48, 0.018473254002294232), (49, 0.018154517274518164), (50, 0.01748076810836792)]
+FL Paper Experiment | INFO flwr 2024-03-18 21:30:20,084 | app.py:227 | app_fit: metrics_distributed_fit {}
+FL Paper Experiment | INFO flwr 2024-03-18 21:30:20,084 | app.py:228 | app_fit: metrics_distributed {'metrics': [(1, [(2, {'accuracy': 0.064}), (2, {'accuracy': 0.048}), (2, {'accuracy': 0.064}), (2, {'accuracy': 0.096}), (2, {'accuracy': 0.12903225806451613}), (2, {'accuracy': 0.088}), (2, {'accuracy': 0.136}), (2, {'accuracy': 0.08}), (2, {'accuracy': 0.128}), (2, {'accuracy': 0.096})]), (2, [(2, {'accuracy': 0.112}), (2, {'accuracy': 0.136}), (2, {'accuracy': 0.136}), (2, {'accuracy': 0.136}), (2, {'accuracy': 0.136}), (2, {'accuracy': 0.088}), (2, {'accuracy': 0.152}), (2, {'accuracy': 0.08}), (2, {'accuracy': 0.072}), (2, {'accuracy': 0.136})]), (3, [(2, {'accuracy': 0.192}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.152}), (2, {'accuracy': 0.12903225806451613}), (2, {'accuracy': 0.176}), (2, {'accuracy': 0.168}), (2, {'accuracy': 0.184}), (2, {'accuracy': 0.208}), (2, {'accuracy': 0.192}), (2, {'accuracy': 0.2})]), (4, [(2, {'accuracy': 0.168}), (2, {'accuracy': 0.256}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.208}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.176}), (2, {'accuracy': 0.208}), (2, {'accuracy': 0.176}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.2})]), (5, [(2, {'accuracy': 0.208}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.232}), (2, {'accuracy': 0.216}), (2, {'accuracy': 0.192}), (2, {'accuracy': 0.168}), (2, {'accuracy': 0.176}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.176}), (2, {'accuracy': 0.184})]), (6, [(2, {'accuracy': 0.208}), (2, {'accuracy': 0.232}), (2, {'accuracy': 0.208}), (2, {'accuracy': 0.248}), (2, {'accuracy': 0.184}), (2, {'accuracy': 0.208}), (2, {'accuracy': 0.128}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.232})]), (7, [(2, {'accuracy': 0.136}), (2, {'accuracy': 0.16}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.24193548387096775}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.216}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.24})]), (8, [(2, {'accuracy': 0.208}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.16}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.18548387096774194}), (2, {'accuracy': 0.216}), (2, {'accuracy': 0.248})]), (9, [(2, {'accuracy': 0.248}), (2, {'accuracy': 0.28}), (2, {'accuracy': 0.248}), (2, {'accuracy': 0.1935483870967742}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.168}), (2, {'accuracy': 0.232}), (2, {'accuracy': 0.272})]), (10, [(2, {'accuracy': 0.192}), (2, {'accuracy': 0.23387096774193547}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.192}), (2, {'accuracy': 0.208}), (2, {'accuracy': 0.192}), (2, {'accuracy': 0.232}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.24})]), (11, [(2, {'accuracy': 0.256}), (2, {'accuracy': 0.184}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.28}), (2, {'accuracy': 0.248}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.256}), (2, {'accuracy': 0.304}), (2, {'accuracy': 0.24})]), (12, [(2, {'accuracy': 0.264}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.192}), (2, {'accuracy': 0.208}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.28}), (2, {'accuracy': 0.296})]), (13, [(2, {'accuracy': 0.224}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.32}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.232}), (2, {'accuracy': 0.256}), (2, {'accuracy': 0.248}), (2, {'accuracy': 0.224})]), (14, [(2, {'accuracy': 0.208}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.28}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.296}), (2, {'accuracy': 0.232}), (2, {'accuracy': 0.312}), (2, {'accuracy': 0.32}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.248})]), (15, [(2, {'accuracy': 0.264}), (2, {'accuracy': 0.2}), (2, {'accuracy': 0.248}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.208}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.216}), (2, {'accuracy': 0.256})]), (16, [(2, {'accuracy': 0.256}), (2, {'accuracy': 0.256}), (2, {'accuracy': 0.28}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.184}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.28}), (2, {'accuracy': 0.32}), (2, {'accuracy': 0.272})]), (17, [(2, {'accuracy': 0.312}), (2, {'accuracy': 0.256}), (2, {'accuracy': 0.216}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.256}), (2, {'accuracy': 0.232}), (2, {'accuracy': 0.264})]), (18, [(2, {'accuracy': 0.224}), (2, {'accuracy': 0.256}), (2, {'accuracy': 0.248}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.296}), (2, {'accuracy': 0.28}), (2, {'accuracy': 0.24}), (2, {'accuracy': 0.208})]), (19, [(2, {'accuracy': 0.304}), (2, {'accuracy': 0.3064516129032258}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.232}), (2, {'accuracy': 0.224}), (2, {'accuracy': 0.304}), (2, {'accuracy': 0.232})]), (20, [(2, {'accuracy': 0.288}), (2, {'accuracy': 0.296}), (2, {'accuracy': 0.32}), (2, {'accuracy': 0.352}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.232}), (2, {'accuracy': 0.32}), (2, {'accuracy': 0.328}), (2, {'accuracy': 0.352}), (2, {'accuracy': 0.328})]), (21, [(2, {'accuracy': 0.248}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.29838709677419356}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.328}), (2, {'accuracy': 0.392}), (2, {'accuracy': 0.376}), (2, {'accuracy': 0.328}), (2, {'accuracy': 0.32}), (2, {'accuracy': 0.256})]), (22, [(2, {'accuracy': 0.288}), (2, {'accuracy': 0.392}), (2, {'accuracy': 0.416}), (2, {'accuracy': 0.344}), (2, {'accuracy': 0.432}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.264}), (2, {'accuracy': 0.304}), (2, {'accuracy': 0.416}), (2, {'accuracy': 0.296})]), (23, [(2, {'accuracy': 0.376}), (2, {'accuracy': 0.36}), (2, {'accuracy': 0.384}), (2, {'accuracy': 0.384}), (2, {'accuracy': 0.328}), (2, {'accuracy': 0.432}), (2, {'accuracy': 0.416}), (2, {'accuracy': 0.272}), (2, {'accuracy': 0.32}), (2, {'accuracy': 0.336})]), (24, [(2, {'accuracy': 0.312}), (2, {'accuracy': 0.352}), (2, {'accuracy': 0.416}), (2, {'accuracy': 0.344}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.448}), (2, {'accuracy': 0.376}), (2, {'accuracy': 0.376}), (2, {'accuracy': 0.3064516129032258}), (2, {'accuracy': 0.408})]), (25, [(2, {'accuracy': 0.29838709677419356}), (2, {'accuracy': 0.328}), (2, {'accuracy': 0.328}), (2, {'accuracy': 0.456}), (2, {'accuracy': 0.44}), (2, {'accuracy': 0.424}), (2, {'accuracy': 0.344}), (2, {'accuracy': 0.408}), (2, {'accuracy': 0.288}), (2, {'accuracy': 0.4})]), (26, [(2, {'accuracy': 0.376}), (2, {'accuracy': 0.456}), (2, {'accuracy': 0.3629032258064516}), (2, {'accuracy': 0.432}), (2, {'accuracy': 0.384}), (2, {'accuracy': 0.416}), (2, {'accuracy': 0.448}), (2, {'accuracy': 0.456}), (2, {'accuracy': 0.44}), (2, {'accuracy': 0.408})]), (27, [(2, {'accuracy': 0.408}), (2, {'accuracy': 0.456}), (2, {'accuracy': 0.424}), (2, {'accuracy': 0.424}), (2, {'accuracy': 0.368}), (2, {'accuracy': 0.472}), (2, {'accuracy': 0.416}), (2, {'accuracy': 0.488}), (2, {'accuracy': 0.4112903225806452}), (2, {'accuracy': 0.504})]), (28, [(2, {'accuracy': 0.496}), (2, {'accuracy': 0.44}), (2, {'accuracy': 0.36}), (2, {'accuracy': 0.456}), (2, {'accuracy': 0.392}), (2, {'accuracy': 0.48}), (2, {'accuracy': 0.33064516129032256}), (2, {'accuracy': 0.464}), (2, {'accuracy': 0.48}), (2, {'accuracy': 0.44})]), (29, [(2, {'accuracy': 0.408}), (2, {'accuracy': 0.49193548387096775}), (2, {'accuracy': 0.472}), (2, {'accuracy': 0.552}), (2, {'accuracy': 0.4}), (2, {'accuracy': 0.504}), (2, {'accuracy': 0.472}), (2, {'accuracy': 0.416}), (2, {'accuracy': 0.52}), (2, {'accuracy': 0.488})]), (30, [(2, {'accuracy': 0.4}), (2, {'accuracy': 0.432}), (2, {'accuracy': 0.36}), (2, {'accuracy': 0.504}), (2, {'accuracy': 0.496}), (2, {'accuracy': 0.488}), (2, {'accuracy': 0.472}), (2, {'accuracy': 0.6}), (2, {'accuracy': 0.528}), (2, {'accuracy': 0.472})]), (31, [(2, {'accuracy': 0.4596774193548387}), (2, {'accuracy': 0.456}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.496}), (2, {'accuracy': 0.52}), (2, {'accuracy': 0.432}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.4}), (2, {'accuracy': 0.488}), (2, {'accuracy': 0.48})]), (32, [(2, {'accuracy': 0.568}), (2, {'accuracy': 0.56}), (2, {'accuracy': 0.448}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.48}), (2, {'accuracy': 0.488}), (2, {'accuracy': 0.488}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.56}), (2, {'accuracy': 0.552})]), (33, [(2, {'accuracy': 0.464}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.448}), (2, {'accuracy': 0.4838709677419355}), (2, {'accuracy': 0.416}), (2, {'accuracy': 0.432}), (2, {'accuracy': 0.52}), (2, {'accuracy': 0.44}), (2, {'accuracy': 0.496})]), (34, [(2, {'accuracy': 0.576}), (2, {'accuracy': 0.52}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.488}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.512}), (2, {'accuracy': 0.464}), (2, {'accuracy': 0.552}), (2, {'accuracy': 0.472}), (2, {'accuracy': 0.432})]), (35, [(2, {'accuracy': 0.52}), (2, {'accuracy': 0.496}), (2, {'accuracy': 0.608}), (2, {'accuracy': 0.552}), (2, {'accuracy': 0.512}), (2, {'accuracy': 0.496}), (2, {'accuracy': 0.52}), (2, {'accuracy': 0.6}), (2, {'accuracy': 0.488}), (2, {'accuracy': 0.536})]), (36, [(2, {'accuracy': 0.568}), (2, {'accuracy': 0.52}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.544}), (2, {'accuracy': 0.512}), (2, {'accuracy': 0.4}), (2, {'accuracy': 0.52}), (2, {'accuracy': 0.512}), (2, {'accuracy': 0.6}), (2, {'accuracy': 0.568})]), (37, [(2, {'accuracy': 0.532258064516129}), (2, {'accuracy': 0.512}), (2, {'accuracy': 0.528}), (2, {'accuracy': 0.592}), (2, {'accuracy': 0.608}), (2, {'accuracy': 0.512}), (2, {'accuracy': 0.416}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.552}), (2, {'accuracy': 0.568})]), (38, [(2, {'accuracy': 0.544}), (2, {'accuracy': 0.5645161290322581}), (2, {'accuracy': 0.6}), (2, {'accuracy': 0.576}), (2, {'accuracy': 0.608}), (2, {'accuracy': 0.656}), (2, {'accuracy': 0.68}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.592}), (2, {'accuracy': 0.624})]), (39, [(2, {'accuracy': 0.536}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.512}), (2, {'accuracy': 0.624}), (2, {'accuracy': 0.56}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.624}), (2, {'accuracy': 0.544}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.56})]), (40, [(2, {'accuracy': 0.616}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.672}), (2, {'accuracy': 0.624}), (2, {'accuracy': 0.624}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.568}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.552})]), (41, [(2, {'accuracy': 0.568}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.608}), (2, {'accuracy': 0.536}), (2, {'accuracy': 0.568}), (2, {'accuracy': 0.6}), (2, {'accuracy': 0.608}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.6}), (2, {'accuracy': 0.664})]), (42, [(2, {'accuracy': 0.536}), (2, {'accuracy': 0.552}), (2, {'accuracy': 0.648}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.48}), (2, {'accuracy': 0.592}), (2, {'accuracy': 0.576}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.616})]), (43, [(2, {'accuracy': 0.632}), (2, {'accuracy': 0.608}), (2, {'accuracy': 0.632}), (2, {'accuracy': 0.656}), (2, {'accuracy': 0.5887096774193549}), (2, {'accuracy': 0.672}), (2, {'accuracy': 0.52}), (2, {'accuracy': 0.608}), (2, {'accuracy': 0.688}), (2, {'accuracy': 0.584})]), (44, [(2, {'accuracy': 0.592}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.576}), (2, {'accuracy': 0.688}), (2, {'accuracy': 0.6048387096774194}), (2, {'accuracy': 0.592}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.56}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.624})]), (45, [(2, {'accuracy': 0.624}), (2, {'accuracy': 0.632}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.6}), (2, {'accuracy': 0.648}), (2, {'accuracy': 0.624}), (2, {'accuracy': 0.528}), (2, {'accuracy': 0.672}), (2, {'accuracy': 0.592})]), (46, [(2, {'accuracy': 0.688}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.576}), (2, {'accuracy': 0.608}), (2, {'accuracy': 0.576}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.6532258064516129}), (2, {'accuracy': 0.656}), (2, {'accuracy': 0.696})]), (47, [(2, {'accuracy': 0.72}), (2, {'accuracy': 0.656}), (2, {'accuracy': 0.712}), (2, {'accuracy': 0.672}), (2, {'accuracy': 0.624}), (2, {'accuracy': 0.744}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.752}), (2, {'accuracy': 0.632}), (2, {'accuracy': 0.6935483870967742})]), (48, [(2, {'accuracy': 0.584}), (2, {'accuracy': 0.584}), (2, {'accuracy': 0.72}), (2, {'accuracy': 0.6129032258064516}), (2, {'accuracy': 0.68}), (2, {'accuracy': 0.712}), (2, {'accuracy': 0.624}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.632}), (2, {'accuracy': 0.52})]), (49, [(2, {'accuracy': 0.6209677419354839}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.648}), (2, {'accuracy': 0.632}), (2, {'accuracy': 0.64}), (2, {'accuracy': 0.632}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.688}), (2, {'accuracy': 0.592})]), (50, [(2, {'accuracy': 0.608}), (2, {'accuracy': 0.696}), (2, {'accuracy': 0.672}), (2, {'accuracy': 0.704}), (2, {'accuracy': 0.656}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.6}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.616}), (2, {'accuracy': 0.608})])], 'accuracy': [(1, 0.0929032258064516), (2, 0.11840000000000002), (3, 0.1825032258064516), (4, 0.2032), (5, 0.19519999999999998), (6, 0.2048), (7, 0.2057935483870968), (8, 0.22254838709677421), (9, 0.2353548387096774), (10, 0.2249870967741935), (11, 0.25200000000000006), (12, 0.2528), (13, 0.24720000000000003), (14, 0.26480000000000004), (15, 0.24560000000000004), (16, 0.25839999999999996), (17, 0.26560000000000006), (18, 0.25680000000000003), (19, 0.2698451612903226), (20, 0.30799999999999994), (21, 0.3122387096774193), (22, 0.3424), (23, 0.36079999999999995), (24, 0.3626451612903226), (25, 0.3714387096774193), (26, 0.4178903225806452), (27, 0.4371290322580645), (28, 0.4338645161290322), (29, 0.47239354838709674), (30, 0.47520000000000007), (31, 0.4803677419354839), (32, 0.5216), (33, 0.4819870967741936), (34, 0.5136000000000001), (35, 0.5327999999999999), (36, 0.5359999999999999), (37, 0.5404258064516128), (38, 0.5980516129032258), (39, 0.5664), (40, 0.6032), (41, 0.6032), (42, 0.5784), (43, 0.6188709677419354), (44, 0.6108838709677419), (45, 0.6176), (46, 0.6317225806451613), (47, 0.6845548387096774), (48, 0.6284903225806451), (49, 0.6348967741935483), (50, 0.6391999999999999)]}
+FL Paper Experiment | INFO flwr 2024-03-18 21:30:20,091 | app.py:229 | app_fit: losses_centralized []
+FL Paper Experiment | INFO flwr 2024-03-18 21:30:20,091 | app.py:230 | app_fit: metrics_centralized {}
+FL Paper Experiment | INFO flwr 2024-03-18 21:30:20,095 | main.py:43 | 
+================================================================================
+CIFAR10 - FedProx - IID Distribution has ended
+================================================================================

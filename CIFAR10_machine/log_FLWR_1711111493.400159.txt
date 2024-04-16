@@ -1,0 +1,15 @@
+FL Paper Experiment | INFO flwr 2024-03-22 12:44:56,150 | main.py:25 | 
+================================================================================
+CIFAR10 - FedAvgM(accept_failures=True) - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-03-22 12:44:56,151 | app.py:178 | Starting Flower simulation, config: ServerConfig(num_rounds=100, round_timeout=None)
+FL Paper Experiment | INFO flwr 2024-03-22 12:44:59,189 | app.py:213 | Flower VCE: Ray initialized with resources: {'node:__internal_head__': 1.0, 'object_store_memory': 4514414592.0, 'memory': 9028829184.0, 'CPU': 4.0, 'node:192.168.42.122': 1.0}
+FL Paper Experiment | INFO flwr 2024-03-22 12:44:59,190 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.dev/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-03-22 12:44:59,190 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 4, 'num_gpus': 0}
+FL Paper Experiment | INFO flwr 2024-03-22 12:44:59,207 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 1 actors
+FL Paper Experiment | INFO flwr 2024-03-22 12:44:59,208 | server.py:89 | Initializing global parameters
+FL Paper Experiment | INFO flwr 2024-03-22 12:44:59,208 | server.py:276 | Requesting initial parameters from one random client
+FL Paper Experiment | INFO flwr 2024-03-22 12:45:05,542 | server.py:280 | Received initial parameters from one random client
+FL Paper Experiment | INFO flwr 2024-03-22 12:45:05,542 | server.py:91 | Evaluating initial parameters
+FL Paper Experiment | INFO flwr 2024-03-22 12:45:05,542 | server.py:104 | FL starting
+FL Paper Experiment | DEBUG flwr 2024-03-22 12:45:05,542 | server.py:222 | fit_round 1: strategy sampled 10 clients (out of 10)

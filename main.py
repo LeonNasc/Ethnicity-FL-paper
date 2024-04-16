@@ -2,8 +2,9 @@ import torch
 import partition_scripts
 import datetime
 import flwr as fl
+import gc
 
-from neural_nets import VGG7, get_parameters
+from neural_nets import VGG7, VGG9, VGG11, VGG13, VGG19, VGG16, get_parameters
 from logging import INFO
 from flwr.common.logger import log
 from Clients import FlowerClient, weighted_average, fit_config
@@ -37,17 +38,14 @@ class FedExperiment():
 # Specify client resources if you need GPU (defaults to 1 CPU and 0 GPU)
 def  get_resources():
     if DEVICE.type == "cpu":
-        client_resources = {"num_cpus": 2, "num_gpus": 0}
-    else:
-        client_resources = {"num_cpus": 2, "num_gpus": 1}
+        client_resources = {"num_cpus": 10, "num_gpus": 0, "memory": 3*1024*1024*1024}
 
     return client_resources
 
 client_resources = get_resources()
 
 # Needed for initial params in fedAdam and FedYogi
-#sample_net = VGG7(classes=2,shape=(64,64)) #Only for CelebA/FedFaces - Edit class numbers
-#sample_net = VGG7(classes=100,shape=(32,32)) #Only for CIFAR10 - Edit class numbers
+#sample_net = VGG7(classes=100,shape=(32,32))
 
 def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     fedAvg = fl.server.strategy.FedAvg(
@@ -113,7 +111,7 @@ def client_fn_CIFAR10_IID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
 
     # Create model
-    net = VGG7(classes=10).to(DEVICE)
+    net = VGG7(classes=10, shape=(32,32)).to(DEVICE)
 
     # Load data (CIFAR-10)
     trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]
@@ -162,6 +160,7 @@ def client_fn_CelebA_IID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
 
     # Create model
+    # TODO: Resize and adapt this snippet
     net = VGG7(classes=2, shape=(64,64)).to(DEVICE)
 
     # Load data (CIFAR-10)
@@ -174,11 +173,44 @@ def client_fn_CelebA_IID(cid: str) -> FlowerClient:
     # Create a  single Flower client representing a single organization
     return FlowerClient(net, trainloader, valloader, cid, DEVICE).to_client()
 
+def client_fn_FedFaces_IID(cid: str) -> FlowerClient:
+    """Create a Flower client representing a single organization."""
+
+    # Create model
+    net = VGG7(classes=4, shape=(32,32)).to(DEVICE)
+
+    # Load data (CIFAR-10)
+    trainloaders, valloaders,_ =  DATA_STORE["FedFaces_IID"]
+    # Note: each client gets a different trainloader/valloader, so each client
+    # will train and evaluate on their own unique data
+    trainloader = trainloaders[int(cid)]
+    valloader = valloaders[int(cid)]
+
+    # Create a  single Flower client representing a single organization
+    return FlowerClient(net, trainloader, valloader, cid, DEVICE).to_client()
+
+def client_fn_FedFaces_nonIID(cid: str) -> FlowerClient:
+    """Create a Flower client representing a single organization."""
+
+    # Create model
+    net = VGG7(classes=4, shape=(32,32)).to(DEVICE)
+
+    # Load data (CIFAR-10)
+    trainloaders, valloaders,_ =  DATA_STORE["FedFaces_nonIID"]
+    # Note: each client gets a different trainloader/valloader, so each client
+    # will train and evaluate on their own unique data
+    trainloader = trainloaders[int(cid)]
+    valloader = valloaders[int(cid)]
+
+    # Create a  single Flower client representing a single organization
+    return FlowerClient(net, trainloader, valloader, cid, DEVICE).to_client()
+
 
 def run_FL_for_n_clients(the_client_fn, clients,sample_net):
     all_metrics = {}
-    for strategy in setup_strategies(sample_net):
-        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"CIFAR10 - {str(strategy)} - IID Distribution")
+    for strategy in setup_strategies(sample_net, fraction_fit=0.75, fraction_eval=0.75)[2:-2]:
+        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"FedFaces - {str(strategy)} - {clients} clients - IID Distribution")
+        #all_metrics[str(strategy)] = experiment.simulate_FL(TRAINING_ROUNDS, clients)
         all_metrics[str(strategy)] = experiment.simulate_FL(TRAINING_ROUNDS, clients)
     
     return all_metrics
@@ -190,15 +222,12 @@ if __name__ == "__main__":
 
     TRAINING_ROUNDS = 100
 
-    sample_net = VGG7(classes=10, shape=(32,32))
-    clients = 10
-    DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR10")
-    run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net)
+    sample_net = VGG7(classes=4, shape=(32,32))
 
-    clients = 50
-    DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR10")
-    run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net)
-
-    clients = 100
-    DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR10")
-    run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net)
+    clients = 25
+    '''
+    DATA_STORE["FedFaces_nonIID"]= partition_scripts.partition_FedFaces_nonIID(clients)
+    run_FL_for_n_clients(client_fn_FedFaces_nonIID, clients, sample_net)
+    '''
+    DATA_STORE["CIFAR100_nonIID"]= partition_scripts.partition_CIFAR_nonIID(clients, "CIFAR100")
+    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net)
