@@ -212,12 +212,12 @@ def VGG19(classes, shape=(32,32)):
 
 ##################################################
 # Resnet50 network
-##################################################
+
 class IdentityBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1):
         super(IdentityBlock, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride)
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=1)
         self.bn1 = nn.BatchNorm2d(out_channels)
         
         self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1)
@@ -249,7 +249,9 @@ class IdentityBlock(nn.Module):
         out = self.conv3(out)
         out = self.bn3(out)
         
-        out += self.shortcut(identity)
+        identity = self.shortcut(identity)
+        
+        out += identity
         out = self.relu(out)
         
         return out
