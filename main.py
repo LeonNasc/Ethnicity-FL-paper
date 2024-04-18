@@ -128,6 +128,7 @@ def client_fn_CIFAR10_nonIID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
 
     # Create model
+    classes = 10
     net = _resnet18(classes=10).to(DEVICE)
 
     # Load data (CIFAR-10)
@@ -138,11 +139,12 @@ def client_fn_CIFAR10_nonIID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE).to_client()
+    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 def client_fn_CIFAR100_nonIID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
 
+    classes=100
     # Create model
     net = _resnet18(classes=100).to(DEVICE)
 
@@ -154,29 +156,30 @@ def client_fn_CIFAR100_nonIID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE).to_client()
+    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
-
-def client_fn_CelebA_IID(cid: str) -> FlowerClient:
+def client_fn_CIFAR100_IID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
 
+    classes=100
     # Create model
-    # TODO: Resize and adapt this snippet
-    net = _resnet18(classes=2, shape=(64,64)).to(DEVICE)
+    net = _resnet18(classes=100).to(DEVICE)
 
     # Load data (CIFAR-10)
-    trainloaders, valloaders,_ =  DATA_STORE["CelebA_IID"]
+    trainloaders, valloaders,_ =  DATA_STORE["CIFAR100_IID"]
     # Note: each client gets a different trainloader/valloader, so each client
     # will train and evaluate on their own unique data
     trainloader = trainloaders[int(cid)]
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE).to_client()
+    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
+
 
 def client_fn_FedFaces_IID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
 
+    classes=4
     # Create model
     net = _resnet18(classes=4, shape=(32,32)).to(DEVICE)
 
@@ -188,11 +191,11 @@ def client_fn_FedFaces_IID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE).to_client()
+    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 def client_fn_FedFaces_nonIID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
-
+    classes=4
     # Create model
     net = _resnet18(classes=4, shape=(32,32)).to(DEVICE)
 
@@ -204,7 +207,7 @@ def client_fn_FedFaces_nonIID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE).to_client()
+    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 
 def run_FL_for_n_clients(the_client_fn, clients,sample_net):
@@ -221,10 +224,31 @@ if __name__ == "__main__":
         f"Training on {DEVICE} using PyTorch {torch.__version__} and Flower {fl.__version__}"
     )
 
-    TRAINING_ROUNDS = 10
+    TRAINING_ROUNDS = 100
 
     sample_net = _resnet18(classes=10, shape=(32,32))
 
     clients = 50
     DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR10")
     run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net)
+    del DATA_STORE["CIFAR10_IID"]
+
+    DATA_STORE["CIFAR10_nonIID"]= partition_scripts.partition_CIFAR_nonIID(clients, "CIFAR10")
+    run_FL_for_n_clients(client_fn_CIFAR10_nonIID, clients, sample_net)
+    del DATA_STORE["CIFAR10_nonIID"]
+
+    DATA_STORE["CIFAR100_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR100")
+    run_FL_for_n_clients(client_fn_CIFAR100_IID, clients, sample_net)
+    del DATA_STORE["CIFAR100_IID"]
+
+    DATA_STORE["CIFAR100_nonIID"]= partition_scripts.partition_CIFAR_nonIID(clients, "CIFAR100")
+    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net)
+    del DATA_STORE["CIFAR100_nonIID"]
+
+    DATA_STORE["FedFaces_IID"]= partition_scripts.partition_FedFaces_IID(clients)
+    run_FL_for_n_clients(client_fn_CIFAR100_IID, clients, sample_net)
+    del DATA_STORE["FedFaces_IID"]
+
+    DATA_STORE["FedFaces_nonIID"]= partition_scripts.partition_FedFaces_nonIID(clients)
+    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net)
+    del DATA_STORE["FedFaces_nonIID"]

@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, random_split, TensorDataset
 from torchvision.datasets import CIFAR10, CIFAR100, CelebA
 from typing import Any, Callable, Optional, Tuple
 
-BATCH_SIZE = 96
+BATCH_SIZE = 128
 
 def partition_CIFAR_IID(num_clients, CIFAR_TYPE="CIFAR10", save=False, save_path="-IID"):
     trainset, testset = load_CIFAR(CIFAR_TYPE)
