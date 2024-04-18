@@ -1,0 +1,78 @@
+FL Paper Experiment | INFO flwr 2024-04-17 13:44:59,301 | main.py:26 | 
+================================================================================
+FedFaces - FedAvg(accept_failures=True) - 3 clients - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-04-17 13:44:59,302 | app.py:178 | Starting Flower simulation, config: num_rounds=20, no round_timeout
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,468 | app.py:213 | Flower VCE: Ray initialized with resources: {'CPU': 16.0, 'memory': 19509426587.0, 'object_store_memory': 9754713292.0, 'node:__internal_head__': 1.0, 'node:192.168.42.149': 1.0}
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,469 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.ai/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,469 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 10, 'num_gpus': 0, 'memory': 3221225472}
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,489 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 1 actors
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,489 | server.py:92 | [INIT]
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,490 | server.py:275 | Using initial global parameters provided by strategy
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,490 | server.py:94 | Evaluating initial global parameters
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,490 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,490 | server.py:111 | [ROUND 1]
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:01,490 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:43,496 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | WARNING flwr 2024-04-17 13:45:43,549 | fedavg.py:252 | No fit_metrics_aggregation_fn provided
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:43,550 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:49,251 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:49,251 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:49,251 | server.py:111 | [ROUND 2]
+FL Paper Experiment | INFO flwr 2024-04-17 13:45:49,251 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:46:27,345 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:46:27,380 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:46:33,031 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:46:33,032 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:46:33,032 | server.py:111 | [ROUND 3]
+FL Paper Experiment | INFO flwr 2024-04-17 13:46:33,032 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:10,620 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:10,654 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:16,316 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:16,316 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:16,316 | server.py:111 | [ROUND 4]
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:16,316 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:53,248 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:53,282 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:58,941 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:58,941 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:58,941 | server.py:111 | [ROUND 5]
+FL Paper Experiment | INFO flwr 2024-04-17 13:47:58,941 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:48:37,041 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:48:37,095 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:48:42,817 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:48:42,817 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:48:42,818 | server.py:111 | [ROUND 6]
+FL Paper Experiment | INFO flwr 2024-04-17 13:48:42,818 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:49:20,813 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:49:20,867 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:49:26,515 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:49:26,515 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:49:26,515 | server.py:111 | [ROUND 7]
+FL Paper Experiment | INFO flwr 2024-04-17 13:49:26,515 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:04,452 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:04,486 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:10,155 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:10,155 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:10,155 | server.py:111 | [ROUND 8]
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:10,155 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:48,062 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:48,116 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:53,733 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:53,733 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:53,733 | server.py:111 | [ROUND 9]
+FL Paper Experiment | INFO flwr 2024-04-17 13:50:53,734 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:51:30,899 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:51:30,932 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:51:36,586 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:51:36,586 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:51:36,586 | server.py:111 | [ROUND 10]
+FL Paper Experiment | INFO flwr 2024-04-17 13:51:36,587 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:52:13,915 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:52:13,947 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:52:19,692 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:52:19,692 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:52:19,692 | server.py:111 | [ROUND 11]
+FL Paper Experiment | INFO flwr 2024-04-17 13:52:19,692 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:52:58,130 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:52:58,164 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)

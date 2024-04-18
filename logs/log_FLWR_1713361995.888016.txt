@@ -1,0 +1,71 @@
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:16,663 | main.py:26 | 
+================================================================================
+FedFaces - FedAvg(accept_failures=True) - 3 clients - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:16,664 | app.py:178 | Starting Flower simulation, config: num_rounds=2, no round_timeout
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,821 | app.py:213 | Flower VCE: Ray initialized with resources: {'node:__internal_head__': 1.0, 'object_store_memory': 9759903744.0, 'memory': 19519807488.0, 'CPU': 16.0, 'node:192.168.42.149': 1.0}
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,821 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.ai/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,821 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 10, 'num_gpus': 0, 'memory': 3221225472}
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,831 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 1 actors
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,831 | server.py:92 | [INIT]
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,831 | server.py:275 | Using initial global parameters provided by strategy
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,831 | server.py:94 | Evaluating initial global parameters
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,831 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,831 | server.py:111 | [ROUND 1]
+FL Paper Experiment | INFO flwr 2024-04-17 13:53:18,831 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:02,116 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | WARNING flwr 2024-04-17 13:54:02,177 | fedavg.py:252 | No fit_metrics_aggregation_fn provided
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:02,178 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:07,931 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:07,931 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:07,931 | server.py:111 | [ROUND 2]
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:07,931 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:46,499 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:46,543 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,148 | server.py:190 | aggregate_evaluate: received 2 results and 0 failures
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,149 | server.py:487 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,149 | server.py:488 | [SUMMARY]
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,149 | server.py:489 | Run finished 2 rounds in 93.32s
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:492 | History (loss, distributed):
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:494 | 	'\tround 1: 1.8566196712396914\n\tround 2: 1.5669735407425187\n'History (metrics, distributed, evaluate):
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:494 | 	{'accuracy': [(1, 0.3055805580558056), (2, 0.41071107110711064)],
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:494 | 	 'metrics': [(1,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:494 | 	              [(58,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:494 | 	                {'accuracy': 0.31233123312331235,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:494 | 	                 'f1': 0.307094931602478,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:494 | 	                 'kappa': 0.22940994799137115,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:494 | 	                 'precision': 0.33734938502311707,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,150 | server.py:494 | 	                 'recall': 0.33734938502311707,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'roc': 0.7646642923355103}),
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	               (58,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                {'accuracy': 0.2988298829882988,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'f1': 0.2938256859779358,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'kappa': 0.21610453724861145,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'precision': 0.3253012001514435,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'recall': 0.3253012001514435,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'roc': 0.7602863907814026})]),
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	             (2,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	              [(58,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                {'accuracy': 0.40936093609360935,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'f1': 0.4023679196834564,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'kappa': 0.33505964279174805,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'precision': 0.3855421543121338,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'recall': 0.3855421543121338,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'roc': 0.8148391246795654}),
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	               (58,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                {'accuracy': 0.41206120612061203,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'f1': 0.4049609303474426,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'kappa': 0.33833882212638855,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'precision': 0.3614457845687866,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'recall': 0.3614457845687866,
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:494 | 	                 'roc': 0.8166745901107788})])]}
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,151 | server.py:495 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,152 | main.py:34 | 
+================================================================================
+FedFaces - FedAvg(accept_failures=True) - 3 clients - IID Distribution has ended
+================================================================================
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,152 | main.py:26 | 
+================================================================================
+FedFaces - FedProx(accept_failures=True) - 3 clients - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-04-17 13:54:52,152 | app.py:178 | Starting Flower simulation, config: num_rounds=2, no round_timeout

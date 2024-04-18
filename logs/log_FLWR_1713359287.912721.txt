@@ -1,0 +1,273 @@
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:08,719 | main.py:26 | 
+================================================================================
+FedFaces - FedAvg(accept_failures=True) - 25 clients - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:08,720 | app.py:178 | Starting Flower simulation, config: num_rounds=20, no round_timeout
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:10,990 | app.py:213 | Flower VCE: Ray initialized with resources: {'node:__internal_head__': 1.0, 'CPU': 16.0, 'memory': 19512641127.0, 'object_store_memory': 9756320563.0, 'node:192.168.42.149': 1.0}
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:10,990 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.ai/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:10,991 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 10, 'num_gpus': 0, 'memory': 3221225472}
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:11,001 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 1 actors
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:11,001 | server.py:92 | [INIT]
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:11,001 | server.py:275 | Using initial global parameters provided by strategy
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:11,001 | server.py:94 | Evaluating initial global parameters
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:11,001 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:11,001 | server.py:111 | [ROUND 1]
+FL Paper Experiment | INFO flwr 2024-04-17 13:08:11,001 | server.py:224 | configure_fit: strategy sampled 18 clients (out of 25)
+FL Paper Experiment | INFO flwr 2024-04-17 13:09:31,916 | server.py:238 | aggregate_fit: received 18 results and 0 failures
+FL Paper Experiment | WARNING flwr 2024-04-17 13:09:32,301 | fedavg.py:252 | No fit_metrics_aggregation_fn provided
+FL Paper Experiment | INFO flwr 2024-04-17 13:09:32,301 | server.py:176 | configure_evaluate: strategy sampled 18 clients (out of 25)
+FL Paper Experiment | ERROR flwr 2024-04-17 13:09:34,045 | ray_client_proxy.py:85 | Traceback (most recent call last):
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 73, in _submit_job
+    out_mssg, updated_context = self.actor_pool.get_client_result(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 399, in get_client_result
+    return self._fetch_future_result(cid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 280, in _fetch_future_result
+    res_cid, out_mssg, updated_context = ray.get(
+                                         ^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientAppException): [36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 98, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 81, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 137, in handle_legacy_message_from_msgtype
+    evaluate_res = maybe_call_evaluate(
+                   ^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa, precision, recall = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+                                                                                                                   ^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1688, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'ResNet' object has no attribute 'classes'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 64, in run
+    raise ClientAppException(str(ex)) from ex
+flwr.client.client_app.ClientAppException: 
+Exception ClientAppException occurred. Message: 'ResNet' object has no attribute 'classes'
+
+FL Paper Experiment | ERROR flwr 2024-04-17 13:09:34,046 | ray_client_proxy.py:86 | [36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 98, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 81, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 137, in handle_legacy_message_from_msgtype
+    evaluate_res = maybe_call_evaluate(
+                   ^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa, precision, recall = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+                                                                                                                   ^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1688, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'ResNet' object has no attribute 'classes'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 64, in run
+    raise ClientAppException(str(ex)) from ex
+flwr.client.client_app.ClientAppException: 
+Exception ClientAppException occurred. Message: 'ResNet' object has no attribute 'classes'
+FL Paper Experiment | ERROR flwr 2024-04-17 13:09:35,008 | ray_client_proxy.py:85 | Traceback (most recent call last):
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 73, in _submit_job
+    out_mssg, updated_context = self.actor_pool.get_client_result(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 399, in get_client_result
+    return self._fetch_future_result(cid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 280, in _fetch_future_result
+    res_cid, out_mssg, updated_context = ray.get(
+                                         ^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientAppException): [36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 98, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 81, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 137, in handle_legacy_message_from_msgtype
+    evaluate_res = maybe_call_evaluate(
+                   ^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa, precision, recall = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+                                                                                                                   ^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1688, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'ResNet' object has no attribute 'classes'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 64, in run
+    raise ClientAppException(str(ex)) from ex
+flwr.client.client_app.ClientAppException: 
+Exception ClientAppException occurred. Message: 'ResNet' object has no attribute 'classes'
+
+FL Paper Experiment | ERROR flwr 2024-04-17 13:09:35,008 | ray_client_proxy.py:86 | [36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 98, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 81, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 137, in handle_legacy_message_from_msgtype
+    evaluate_res = maybe_call_evaluate(
+                   ^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa, precision, recall = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+                                                                                                                   ^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1688, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'ResNet' object has no attribute 'classes'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 64, in run
+    raise ClientAppException(str(ex)) from ex
+flwr.client.client_app.ClientAppException: 
+Exception ClientAppException occurred. Message: 'ResNet' object has no attribute 'classes'
+FL Paper Experiment | ERROR flwr 2024-04-17 13:09:35,953 | ray_client_proxy.py:85 | Traceback (most recent call last):
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 73, in _submit_job
+    out_mssg, updated_context = self.actor_pool.get_client_result(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 399, in get_client_result
+    return self._fetch_future_result(cid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 280, in _fetch_future_result
+    res_cid, out_mssg, updated_context = ray.get(
+                                         ^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientAppException): [36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 98, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 81, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 137, in handle_legacy_message_from_msgtype
+    evaluate_res = maybe_call_evaluate(
+                   ^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa, precision, recall = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+                                                                                                                   ^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1688, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'ResNet' object has no attribute 'classes'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 64, in run
+    raise ClientAppException(str(ex)) from ex
+flwr.client.client_app.ClientAppException: 
+Exception ClientAppException occurred. Message: 'ResNet' object has no attribute 'classes'
+
+FL Paper Experiment | ERROR flwr 2024-04-17 13:09:35,954 | ray_client_proxy.py:86 | [36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 98, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 81, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 137, in handle_legacy_message_from_msgtype
+    evaluate_res = maybe_call_evaluate(
+                   ^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/Ethnicity-FL-paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa, precision, recall = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+                                                                                                                   ^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1688, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'ResNet' object has no attribute 'classes'
+
+The above exception was the direct cause of the following exception:
+
+[36mray::ClientAppActor.run()[39m (pid=329437, ip=192.168.42.149, actor_id=fb65bb43d424954df652fffd01000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7f16080254d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 64, in run
+    raise ClientAppException(str(ex)) from ex
+flwr.client.client_app.ClientAppException: 
+Exception ClientAppException occurred. Message: 'ResNet' object has no attribute 'classes'

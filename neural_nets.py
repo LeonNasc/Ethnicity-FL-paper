@@ -7,6 +7,7 @@ import torcheval
 import torcheval.metrics
 from torchmetrics.functional.classification import multiclass_cohen_kappa
 
+from torchvision.models import resnet50, resnet18 
 
 from typing import List, Tuple
 from collections import OrderedDict
@@ -104,7 +105,7 @@ class Net(nn.Module):
 def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu"):
     """Train the network on the training set."""
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(net.parameters())
+    optimizer = torch.optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
     net.train()
     for epoch in range(epochs):
         correct, total, epoch_loss = 0, 0, 0.0
@@ -115,10 +116,12 @@ def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu"):
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
+
             # Metrics
             epoch_loss += loss
             total += labels.size(0)
             correct += (torch.max(outputs.data, 1)[1] == labels).sum().item()
+
         epoch_loss /= len(trainloader.dataset)
         epoch_acc = correct / total
 
@@ -159,22 +162,23 @@ def test(net, testloader, DEVICE="cpu", classes=2):
     return loss, accuracy, f1, roc, kappa, precision, recall
 
 def centralized_training(trainloader, valloader, testloader, DEVICE="cpu", net=None, epochs=5, classes=10):
-        torch.manual_seed(0)
 
         if net is None:
+            print("choosing random net")
             net = Net(classes).to(DEVICE)
         else:
             net = net.to(DEVICE)
 
-        for epoch in range(epochs):
-            train(net, trainloader, 1, DEVICE=DEVICE)
-            print(DEVICE)
+        for i in range(10):
+            current_time = datetime.datetime.now()
+            print(f"Begin:Current time: {current_time.strftime('%Y-%m-%d %H:%M:%S')}")
+            train(net, trainloader, epochs, DEVICE=DEVICE)
             metrics = test(net, valloader, classes=classes, DEVICE=DEVICE)
 
-            # Get the current date and time
             current_time = datetime.datetime.now()
-            print(f"Current time: {current_time.strftime('%Y-%m-%d %H:%M:%S')}")
-            print(f"Epoch {epoch+1}: validation loss {metrics[0]}, accuracy {metrics[1]}")
+            print(f"End: Current time: {current_time.strftime('%Y-%m-%d %H:%M:%S')}")
+            # Get the current date and time
+            print(f"Validation round #{i} loss {metrics[0]}, accuracy {metrics[1]}, f1 {metrics[2]}")
 
         metrics = test(net, testloader, DEVICE=DEVICE, classes=classes)
         print(f"Final test set performance:\n\tloss {metrics[0]}\n\taccuracy {metrics[1]}")
@@ -213,130 +217,20 @@ def VGG19(classes, shape=(32,32)):
 ##################################################
 # Resnet50 network
 
-class IdentityBlock(nn.Module):
-    def __init__(self, in_channels, out_channels, stride=1):
-        super(IdentityBlock, self).__init__()
-
-        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=1)
-        self.bn1 = nn.BatchNorm2d(out_channels)
-        
-        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1)
-        self.bn2 = nn.BatchNorm2d(out_channels)
-        
-        self.conv3 = nn.Conv2d(out_channels, out_channels * 4, kernel_size=1)
-        self.bn3 = nn.BatchNorm2d(out_channels * 4)
-        
-        self.relu = nn.ReLU(inplace=True)
-        
-        self.shortcut = nn.Sequential()
-        if stride != 1 or in_channels != out_channels * 4:
-            self.shortcut = nn.Sequential(
-                nn.Conv2d(in_channels, out_channels * 4, kernel_size=1, stride=stride),
-                nn.BatchNorm2d(out_channels * 4)
-            )
+class MyResNet50(nn.Module):
+    def __init__(self, classes=1000):
+        super(MyResNet50, self).__init__()
+        self.model = resnet50()
+        self.model.fc = nn.Linear(512, classes)
 
     def forward(self, x):
-        identity = x
-        
-        out = self.conv1(x)
-        out = self.bn1(out)
-        out = self.relu(out)
-        
-        out = self.conv2(out)
-        out = self.bn2(out)
-        out = self.relu(out)
-        
-        out = self.conv3(out)
-        out = self.bn3(out)
-        
-        identity = self.shortcut(identity)
-        
-        out += identity
-        out = self.relu(out)
-        
-        return out
+        return self.model.forward(x)
 
-class ConvBlock(nn.Module):
-    def __init__(self, in_channels, out_channels, stride=1):
-        super(ConvBlock, self).__init__()
-
-        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride)
-        self.bn1 = nn.BatchNorm2d(out_channels)
-        
-        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1)
-        self.bn2 = nn.BatchNorm2d(out_channels)
-        
-        self.conv3 = nn.Conv2d(out_channels, out_channels * 4, kernel_size=1)
-        self.bn3 = nn.BatchNorm2d(out_channels * 4)
-        
-        self.relu = nn.ReLU(inplace=True)
-        
-        self.shortcut = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels * 4, kernel_size=1, stride=stride),
-            nn.BatchNorm2d(out_channels * 4)
-        )
-
-    def forward(self, x):
-        identity = x
-        
-        out = self.conv1(x)
-        out = self.bn1(out)
-        out = self.relu(out)
-        
-        out = self.conv2(out)
-        out = self.bn2(out)
-        out = self.relu(out)
-        
-        out = self.conv3(out)
-        out = self.bn3(out)
-        
-        identity = self.shortcut(identity)
-        
-        out += identity
-        out = self.relu(out)
-        
-        return out
-
-class ResNet50(nn.Module):
-    def __init__(self, num_classes=1000):
-        super(ResNet50, self).__init__()
-
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3)
-        self.bn1 = nn.BatchNorm2d(64)
-        self.relu = nn.ReLU(inplace=True)
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-
-        self.layer1 = self._make_layer(64, 3, stride=1)
-        self.layer2 = self._make_layer(128, 4, stride=2)
-        self.layer3 = self._make_layer(256, 6, stride=2)
-        self.layer4 = self._make_layer(512, 3, stride=2)
-
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(512 * 4, num_classes)
-
-    def _make_layer(self, out_channels, blocks, stride=1):
-        layers = []
-        layers.append(ConvBlock(64, out_channels, stride=stride))
-        for _ in range(1, blocks):
-            layers.append(IdentityBlock(out_channels, out_channels))
-        return nn.Sequential(*layers)
-
-    def forward(self, x):
-        x = self.conv1(x)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.maxpool(x)
-
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)
-        x = self.layer4(x)
-
-        x = self.avgpool(x)
-        x = torch.flatten(x, 1)
-        x = self.fc(x)
-        return x
-
+def _resnet18(classes, shape=None):
+    net = resnet18()
+    net.fc = nn.Linear(512, classes)
+    
+    return net
 
 ######################################## 
 #   Neural Network Parameter Funcionality for FL

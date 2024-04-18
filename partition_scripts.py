@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, random_split, TensorDataset
 from torchvision.datasets import CIFAR10, CIFAR100, CelebA
 from typing import Any, Callable, Optional, Tuple
 
-BATCH_SIZE = 64
+BATCH_SIZE = 96
 
 def partition_CIFAR_IID(num_clients, CIFAR_TYPE="CIFAR10", save=False, save_path="-IID"):
     trainset, testset = load_CIFAR(CIFAR_TYPE)
@@ -47,11 +47,14 @@ def partition_CelebA_nonIID(num_clients, beta=0.5, save=False, save_path="CelebA
 ############################
 
 def IID_setup(num_clients, trainset, testset, save=False, save_path=None):
-    print(f'Shape nonIID: {trainset.data[0].shape}')
-    partition_size = 1 / num_clients
-    lengths = [partition_size] * (num_clients -1)
-    lengths.append(0.999999999999 - (partition_size * (num_clients-1))) # Fending against rounding errors
-    datasets = random_split(trainset, lengths)
+    print(f'Shape: {trainset.data[0].shape}')
+    if num_clients > 1:
+        partition_size = 1 / num_clients
+        lengths = [partition_size] * (num_clients -1)
+        lengths.append(0.999999999999 - (partition_size * (num_clients-1))) # Fending against rounding errors
+        datasets = random_split(trainset, lengths)
+    else:
+        datasets = random_split(trainset, [1])
     # Split each partition into train/val and create DataLoader
     trainloaders, valloaders, testloader = make_loaders(num_clients, testset, datasets)
 
@@ -157,9 +160,15 @@ def convert_celebA_to_numpy(split, split_name, save=False):
 def make_loaders(num_clients, testset, datasets):
     trainloaders = []
     valloaders = []
+    print(num_clients)
     for ds in datasets:
-        len_val = len(ds) // num_clients 
-        len_train = len(ds) - len_val
+        if num_clients > 1:
+            len_val = len(ds) // num_clients 
+            len_train = len(ds) - len_val
+        else:
+            len_val = 0.2
+            len_train = 0.8
+
         lengths = [len_train, len_val]
         ds_train, ds_val = random_split(ds, lengths)
         trainloaders.append(DataLoader(ds_train, batch_size=BATCH_SIZE, shuffle=True))

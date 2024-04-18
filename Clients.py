@@ -7,13 +7,14 @@ from flwr.common import Metrics
 from torcheval.metrics.functional import multiclass_f1_score
 
 class FlowerClient(fl.client.NumPyClient):
-    def __init__(self, net, trainloader, valloader, cid, DEVICE):
+    def __init__(self, net, trainloader, valloader, cid, DEVICE, classes=10):
         self.net = net
         self.trainloader = trainloader
         self.valloader = valloader
         self.cid = cid
         self.round = 0
         self.device = DEVICE
+        self.classes = classes
 
     def get_parameters(self, config):
         print(f"[Client {self.cid}] get_parameters")
@@ -33,13 +34,14 @@ class FlowerClient(fl.client.NumPyClient):
     def evaluate(self, parameters, config):
         print(f"[Client {self.cid}] evaluate, config: {config}")
         set_parameters(self.net, parameters)
-        loss, accuracy, f1, roc, kappa, precision, recall = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+        loss, accuracy, f1, roc, kappa, precision, recall = test(self.net, self.valloader, DEVICE=self.device, classes=self.classes)
+
         return float(loss), len(self.valloader), {"accuracy": float(accuracy), 
-                                                    "f1": f1, 
-                                                    "roc": roc, 
-                                                    "kappa": kappa,
-                                                    "precision": precision,
-                                                    "recall":recall
+                                                    "f1": f1.item(), 
+                                                    "roc": roc.item(), 
+                                                    "kappa": kappa.item(),
+                                                    "precision": precision.item(),
+                                                    "recall":recall.item()
                                                 }
 
 

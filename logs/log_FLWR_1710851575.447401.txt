@@ -1,0 +1,452 @@
+FL Paper Experiment | INFO flwr 2024-03-19 14:32:59,281 | main.py:35 | 
+================================================================================
+CIFAR10 - FedProx - NonIID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-03-19 14:32:59,283 | app.py:178 | Starting Flower simulation, config: ServerConfig(num_rounds=40, round_timeout=None)
+FL Paper Experiment | INFO flwr 2024-03-19 14:33:01,461 | app.py:213 | Flower VCE: Ray initialized with resources: {'CPU': 6.0, 'node:__internal_head__': 1.0, 'memory': 5647437006.0, 'object_store_memory': 2823718502.0, 'node:172.18.144.40': 1.0}
+FL Paper Experiment | INFO flwr 2024-03-19 14:33:01,462 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.dev/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-03-19 14:33:01,462 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 4, 'num_gpus': 0}
+FL Paper Experiment | INFO flwr 2024-03-19 14:33:01,472 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 1 actors
+FL Paper Experiment | INFO flwr 2024-03-19 14:33:01,473 | server.py:89 | Initializing global parameters
+FL Paper Experiment | INFO flwr 2024-03-19 14:33:01,473 | server.py:276 | Requesting initial parameters from one random client
+FL Paper Experiment | INFO flwr 2024-03-19 14:33:04,701 | server.py:280 | Received initial parameters from one random client
+FL Paper Experiment | INFO flwr 2024-03-19 14:33:04,702 | server.py:91 | Evaluating initial parameters
+FL Paper Experiment | INFO flwr 2024-03-19 14:33:04,703 | server.py:104 | FL starting
+FL Paper Experiment | DEBUG flwr 2024-03-19 14:33:04,704 | server.py:222 | fit_round 1: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | DEBUG flwr 2024-03-19 14:43:18,812 | server.py:236 | fit_round 1 received 10 results and 0 failures
+FL Paper Experiment | WARNING flwr 2024-03-19 14:43:20,135 | fedavg.py:250 | No fit_metrics_aggregation_fn provided
+FL Paper Experiment | DEBUG flwr 2024-03-19 14:43:20,137 | server.py:173 | evaluate_round 1: strategy sampled 10 clients (out of 20)
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:21,510 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 0 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:21,511 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 0 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:22,297 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 6 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:22,297 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 6 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:23,090 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 11 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:23,091 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 11 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:23,885 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 13 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:23,886 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 13 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:24,777 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 12 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:24,777 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 12 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:25,513 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 14 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:25,516 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 14 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:26,305 | ray_client_proxy.py:161 | Traceback (most recent call last):
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 151, in _submit_job
+    res, updated_context = self.actor_pool.get_client_result(self.cid, timeout)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 425, in get_client_result
+    return self._fetch_future_result(cid)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 306, in _fetch_future_result
+    res_cid, res, updated_context = ray.get(
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/home/leon/.local/lib/python3.10/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientException): [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 7 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)
+
+FL Paper Experiment | ERROR flwr 2024-03-19 14:43:26,306 | ray_client_proxy.py:162 | [36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate
+    return maybe_call_evaluate(
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate
+    return client.evaluate(evaluate_ins)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate
+    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate
+    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)
+  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test
+    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa
+    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)
+  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation
+    raise ValueError(
+ValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::DefaultActor.run()[39m (pid=7100, ip=172.18.144.40, actor_id=66b3f7aecc85d5d73d44f47301000000, repr=<flwr.simulation.ray_transport.ray_actor.DefaultActor object at 0x7f764506e6e0>)
+  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 90, in run
+    raise ClientException(str(message)) from ex
+flwr.simulation.ray_transport.ray_actor.ClientException: 
+>>>>>>>A ClientException occurred.('\n\tSomething went wrong when running your client run.\n\tClient 7 crashed when the DefaultActor was running its run.\n\tException triggered on the client side: Traceback (most recent call last):\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 76, in run\n    job_results = job_fn(client)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 225, in evaluate\n    return maybe_call_evaluate(\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/client.py", line 254, in maybe_call_evaluate\n    return client.evaluate(evaluate_ins)\n  File "/home/leon/.local/lib/python3.10/site-packages/flwr/client/numpy_client.py", line 262, in _evaluate\n    results = self.numpy_client.evaluate(parameters, ins.config)  # type: ignore\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/Clients.py", line 36, in evaluate\n    loss, accuracy, f1, roc, kappa = test(self.net, self.valloader, DEVICE=self.device, classes=self.net.classes)\n  File "/mnt/c/Users/leon1/Documents/Research Repo/Experiments/Ethnicity FL paper/neural_nets.py", line 139, in test\n    kappa += multiclass_cohen_kappa(outputs, labels, num_classes=3)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/cohen_kappa.py", line 224, in multiclass_cohen_kappa\n    _multiclass_confusion_matrix_tensor_validation(preds, target, num_classes, ignore_index)\n  File "/home/leon/.local/lib/python3.10/site-packages/torchmetrics/functional/classification/confusion_matrix.py", line 267, in _multiclass_confusion_matrix_tensor_validation\n    raise ValueError(\nValueError: If `preds` have one dimension more than `target`, `preds.shape[1]` should be equal to number of classes.\n',)

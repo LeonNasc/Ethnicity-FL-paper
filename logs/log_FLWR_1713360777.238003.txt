@@ -1,0 +1,105 @@
+FL Paper Experiment | INFO flwr 2024-04-17 13:32:58,014 | main.py:26 | 
+================================================================================
+FedFaces - FedAvg(accept_failures=True) - 3 clients - IID Distribution has started
+================================================================================
+FL Paper Experiment | INFO flwr 2024-04-17 13:32:58,015 | app.py:178 | Starting Flower simulation, config: num_rounds=20, no round_timeout
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,158 | app.py:213 | Flower VCE: Ray initialized with resources: {'memory': 19550517659.0, 'object_store_memory': 9775258828.0, 'node:__internal_head__': 1.0, 'node:192.168.42.149': 1.0, 'CPU': 16.0}
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,158 | app.py:219 | Optimize your simulation with Flower VCE: https://flower.ai/docs/framework/how-to-run-simulations.html
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,158 | app.py:242 | Flower VCE: Resources for each Virtual Client: {'num_cpus': 10, 'num_gpus': 0, 'memory': 3221225472}
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,168 | app.py:288 | Flower VCE: Creating VirtualClientEngineActorPool with 1 actors
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,168 | server.py:92 | [INIT]
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,168 | server.py:275 | Using initial global parameters provided by strategy
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,168 | server.py:94 | Evaluating initial global parameters
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,168 | server.py:110 | 
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,168 | server.py:111 | [ROUND 1]
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:00,168 | server.py:224 | configure_fit: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:41,338 | server.py:238 | aggregate_fit: received 2 results and 0 failures
+FL Paper Experiment | WARNING flwr 2024-04-17 13:33:41,392 | fedavg.py:252 | No fit_metrics_aggregation_fn provided
+FL Paper Experiment | INFO flwr 2024-04-17 13:33:41,392 | server.py:176 | configure_evaluate: strategy sampled 2 clients (out of 3)
+FL Paper Experiment | ERROR flwr 2024-04-17 13:33:44,962 | ray_client_proxy.py:85 | Traceback (most recent call last):
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_client_proxy.py", line 73, in _submit_job
+    out_mssg, updated_context = self.actor_pool.get_client_result(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 399, in get_client_result
+    return self._fetch_future_result(cid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 280, in _fetch_future_result
+    res_cid, out_mssg, updated_context = ray.get(
+                                         ^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/ray/_private/worker.py", line 2524, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ClientAppException): [36mray::ClientAppActor.run()[39m (pid=337642, ip=192.168.42.149, actor_id=f0b020a95d948bdf989ce87501000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7fbcb41114d0>)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 98, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 81, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 141, in handle_legacy_message_from_msgtype
+    out_recordset = evaluateres_to_recordset(evaluate_res)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/recordset_compat.py", line 294, in evaluateres_to_recordset
+    recordset.configs_records[f"{res_str}.metrics"] = ConfigsRecord(
+                                                      ^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/record/configsrecord.py", line 85, in __init__
+    self[k] = configs_dict[k]
+    ~~~~^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/record/typeddict.py", line 38, in __setitem__
+    self._check_value_fn(value)
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/record/configsrecord.py", line 57, in _check_value
+    is_valid(value)
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/record/configsrecord.py", line 35, in is_valid
+    raise TypeError(
+TypeError: Not all values are of valid type. Expected `typing.Union[int, float, str, bytes, bool, typing.List[int], typing.List[float], typing.List[str], typing.List[bytes], typing.List[bool]]` but `<class 'torch.Tensor'>` was passed.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::ClientAppActor.run()[39m (pid=337642, ip=192.168.42.149, actor_id=f0b020a95d948bdf989ce87501000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7fbcb41114d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 64, in run
+    raise ClientAppException(str(ex)) from ex
+flwr.client.client_app.ClientAppException: 
+Exception ClientAppException occurred. Message: Not all values are of valid type. Expected `typing.Union[int, float, str, bytes, bool, typing.List[int], typing.List[float], typing.List[str], typing.List[bytes], typing.List[bool]]` but `<class 'torch.Tensor'>` was passed.
+
+FL Paper Experiment | ERROR flwr 2024-04-17 13:33:44,963 | ray_client_proxy.py:86 | [36mray::ClientAppActor.run()[39m (pid=337642, ip=192.168.42.149, actor_id=f0b020a95d948bdf989ce87501000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7fbcb41114d0>)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 98, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 81, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 141, in handle_legacy_message_from_msgtype
+    out_recordset = evaluateres_to_recordset(evaluate_res)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/recordset_compat.py", line 294, in evaluateres_to_recordset
+    recordset.configs_records[f"{res_str}.metrics"] = ConfigsRecord(
+                                                      ^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/record/configsrecord.py", line 85, in __init__
+    self[k] = configs_dict[k]
+    ~~~~^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/record/typeddict.py", line 38, in __setitem__
+    self._check_value_fn(value)
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/record/configsrecord.py", line 57, in _check_value
+    is_valid(value)
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/common/record/configsrecord.py", line 35, in is_valid
+    raise TypeError(
+TypeError: Not all values are of valid type. Expected `typing.Union[int, float, str, bytes, bool, typing.List[int], typing.List[float], typing.List[str], typing.List[bytes], typing.List[bool]]` but `<class 'torch.Tensor'>` was passed.
+
+The above exception was the direct cause of the following exception:
+
+[36mray::ClientAppActor.run()[39m (pid=337642, ip=192.168.42.149, actor_id=f0b020a95d948bdf989ce87501000000, repr=<flwr.simulation.ray_transport.ray_actor.ClientAppActor object at 0x7fbcb41114d0>)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/debian/venv/lib/python3.11/site-packages/flwr/simulation/ray_transport/ray_actor.py", line 64, in run
+    raise ClientAppException(str(ex)) from ex
+flwr.client.client_app.ClientAppException: 
+Exception ClientAppException occurred. Message: Not all values are of valid type. Expected `typing.Union[int, float, str, bytes, bool, typing.List[int], typing.List[float], typing.List[str], typing.List[bytes], typing.List[bool]]` but `<class 'torch.Tensor'>` was passed.
