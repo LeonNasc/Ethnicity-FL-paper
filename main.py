@@ -7,7 +7,7 @@ import gc
 from neural_nets import _resnet18, get_parameters
 from logging import INFO
 from flwr.common.logger import log
-from Clients import FlowerClient, weighted_average, fit_config
+from Clients import FlowerClient, weighted_average_resnet_CIFAR_open_set, fit_config
 
 today = datetime.datetime.today()
 fl.common.logger.configure(identifier="FL Paper Experiment", filename=f"./logs/log_FLWR_{today.timestamp()}.txt")
@@ -48,6 +48,29 @@ client_resources = get_resources()
 #sample_net = _resnet18(classes=100,shape=(32,32))
 
 def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
+    fedTAvg = fl.server.strategy.FedTrimmedAvg(
+    beta = 0.2,
+    fraction_fit=fraction_fit,  
+    fraction_evaluate=fraction_eval,  
+    min_fit_clients=1,  
+    min_evaluate_clients=1, 
+    min_available_clients=1,
+    on_fit_config_fn=fit_config,
+    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
+    initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
+)
+    fedAdaGrad = fl.server.strategy.FedAdagrad(
+    fraction_fit=fraction_fit,  
+    fraction_evaluate=fraction_eval,  
+    min_fit_clients=1,  
+    min_evaluate_clients=1, 
+    min_available_clients=1,
+    on_fit_config_fn=fit_config,
+    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
+    initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
+)
+
+    '''Just for a short experiment
     fedAvg = fl.server.strategy.FedAvg(
     fraction_fit=fraction_fit,  
     fraction_evaluate=fraction_eval,  
@@ -55,7 +78,7 @@ def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     min_evaluate_clients=1, 
     min_available_clients=1,
     on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average,
+    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
     initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
 )
 
@@ -66,7 +89,7 @@ def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     min_evaluate_clients=1, 
     min_available_clients=1,
     on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average,
+    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
     proximal_mu= 0.5
 )
 
@@ -77,7 +100,7 @@ def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     min_evaluate_clients=1, 
     min_available_clients=1,
     on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average,
+    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
 )
 
     fedAdam = fl.server.strategy.FedAdam(
@@ -87,7 +110,7 @@ def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     min_evaluate_clients=1, 
     min_available_clients=1,
     on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average,
+    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
     initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
 )
 
@@ -98,12 +121,13 @@ def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     min_evaluate_clients=1, 
     min_available_clients=1,
     on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average,
+    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
     initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
-)
-    
+    )
     return (fedAvg, fedProx, fedAvgM, fedAdam, fedYogi)
+    '''   
 
+    return (fedTAvg,fedAdaGrad)
 
 # #### CIFAR10 setup: Client FNS ####
 # A couple of client_fns for using with Flower, one for each dataset experiment
@@ -112,7 +136,7 @@ def client_fn_CIFAR10_IID(cid: str) -> FlowerClient:
 
     classes = 10
     # Create model
-    net = _resnet18(classes=10, shape=(32,32)).to(DEVICE)
+    net = _resnet18(classes=classes, shape=(32,32)).to(DEVICE)
 
     # Load data (CIFAR-10)
     trainloaders, valloaders,_ =  DATA_STORE["CIFAR10_IID"]
@@ -210,11 +234,10 @@ def client_fn_FedFaces_nonIID(cid: str) -> FlowerClient:
     return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 
-def run_FL_for_n_clients(the_client_fn, clients,sample_net):
+def run_FL_for_n_clients(the_client_fn, clients,sample_net, IID=True):
     all_metrics = {}
     for strategy in setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
-        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"FedFaces - {str(strategy)} - {clients} clients - IID Distribution")
-        #all_metrics[str(strategy)] = experiment.simulate_FL(TRAINING_ROUNDS, clients)
+        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"FedFaces - {str(strategy)} - {clients} clients - {"" if IID else "non-"} IID Distribution")
         all_metrics[str(strategy)] = experiment.simulate_FL(TRAINING_ROUNDS, clients)
     
     return all_metrics
@@ -226,15 +249,16 @@ if __name__ == "__main__":
 
     TRAINING_ROUNDS = 100
 
-    sample_net = _resnet18(classes=10, shape=(32,32))
+    classes = 10 #+ 1
+    sample_net = _resnet18(classes=classes, shape=(32,32))
 
-    clients = 50
+    clients = 5
     DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR10")
     run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net)
     del DATA_STORE["CIFAR10_IID"]
 
     DATA_STORE["CIFAR10_nonIID"]= partition_scripts.partition_CIFAR_nonIID(clients, "CIFAR10")
-    run_FL_for_n_clients(client_fn_CIFAR10_nonIID, clients, sample_net)
+    run_FL_for_n_clients(client_fn_CIFAR10_nonIID, clients, sample_net, IID=False)
     del DATA_STORE["CIFAR10_nonIID"]
 
     DATA_STORE["CIFAR100_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR100")
@@ -242,7 +266,7 @@ if __name__ == "__main__":
     del DATA_STORE["CIFAR100_IID"]
 
     DATA_STORE["CIFAR100_nonIID"]= partition_scripts.partition_CIFAR_nonIID(clients, "CIFAR100")
-    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net)
+    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net, IID=False)
     del DATA_STORE["CIFAR100_nonIID"]
 
     DATA_STORE["FedFaces_IID"]= partition_scripts.partition_FedFaces_IID(clients)
@@ -250,5 +274,5 @@ if __name__ == "__main__":
     del DATA_STORE["FedFaces_IID"]
 
     DATA_STORE["FedFaces_nonIID"]= partition_scripts.partition_FedFaces_nonIID(clients)
-    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net)
+    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net, IID=False)
     del DATA_STORE["FedFaces_nonIID"]

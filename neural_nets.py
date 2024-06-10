@@ -102,7 +102,7 @@ class Net(nn.Module):
 
 
 
-def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu"):
+def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu", open_set = False):
     """Train the network on the training set."""
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(net.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
@@ -113,6 +113,9 @@ def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu"):
             images, labels = images.to(DEVICE), labels.to(DEVICE)
             optimizer.zero_grad()
             outputs = net(images)
+            if open_set:
+                outputs = calculate_unknown(outputs)
+
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -129,7 +132,19 @@ def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu"):
             print(f"Epoch {epoch+1}: train loss {epoch_loss}, accuracy {epoch_acc}")
 
 
-def test(net, testloader, DEVICE="cpu", classes=2):
+def calculate_unknown(outputs):
+
+    for i,_ in enumerate(outputs):
+        logits = outputs[i]
+        probs = torch.nn.functional.softmax(logits)
+
+        if max(probs) < 0.5:
+            outputs[i] = torch.zeros(len(outputs[i]))
+            outputs[i][-1] = 1.0
+
+    return outputs
+
+def test(net, testloader, DEVICE="cpu", classes=2, open_set = False):
     """Evaluate the network on the entire test set."""
     criterion = torch.nn.CrossEntropyLoss()
     correct, total, loss, f1, roc, kappa  = 0, 0, 0.0, 0.0, 0.0, 0.0
@@ -159,7 +174,7 @@ def test(net, testloader, DEVICE="cpu", classes=2):
     roc /= batches
     accuracy = correct / total
 
-    return loss, accuracy, f1, roc, kappa, precision, recall
+    return loss, accuracy, f1, roc, kappa, precision, recall, get_parameters(net)
 
 def centralized_training(trainloader, valloader, testloader, DEVICE="cpu", net=None, epochs=5, classes=10):
 
@@ -216,16 +231,6 @@ def VGG19(classes, shape=(32,32)):
 
 ##################################################
 # Resnet50 network
-
-class MyResNet50(nn.Module):
-    def __init__(self, classes=1000):
-        super(MyResNet50, self).__init__()
-        self.model = resnet50()
-        self.model.fc = nn.Linear(512, classes)
-
-    def forward(self, x):
-        return self.model.forward(x)
-
 def _resnet18(classes, shape=None):
     net = resnet18()
     net.fc = nn.Linear(512, classes)
