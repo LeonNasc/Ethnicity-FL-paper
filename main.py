@@ -172,7 +172,7 @@ def run_FL_for_n_clients(the_client_fn, clients,sample_net, dataset_title, IID=T
     all_metrics = {}
     text = "" if IID else "non-"
     #for strategy in setup_strategies(sample_net, fraction_fit=1, fraction_eval=1): #Original implementation
-    strategies = [ScaffoldStrategy, FedNovaStrategy]
+    strategies = [ScaffoldStrategy(), FedNovaStrategy()]
     for i, client_type in enumerate([FlowerClientScaffold, FlowerClientFedNova]):
         CLIENT_OBJ = client_type
         strategy = strategies[i] 
