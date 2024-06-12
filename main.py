@@ -247,16 +247,20 @@ def client_fn_FedFaces_nonIID(cid: str) -> FlowerClient:
 
 def run_FL_for_n_clients(the_client_fn, clients,sample_net, dataset_title, IID=True):
     all_metrics = {}
+    text = "" if IID else "non-"
     for strategy in setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
-        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"{dataset_title} - {str(strategy)} - {clients} clients - {"" if IID else "non-"} IID Distribution")
+        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"{dataset_title} - {str(strategy)} - {clients} clients - {text} IID Distribution")
         all_metrics[str(strategy)] = experiment.simulate_FL(TRAINING_ROUNDS, clients)
     
     return all_metrics
 
 class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
-    def __init__(self, C, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.global_c = None
+
+    def __repr__(self):
+        return "SCAFFOLD"
 
     def initialize_parameters(self, client_manager):
         """Initialize the parameters and control variates."""
