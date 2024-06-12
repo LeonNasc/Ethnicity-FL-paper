@@ -21,6 +21,8 @@ from flwr.server.strategy.aggregate import aggregate
 
 class FedNovaStrategy(FedAvg):
     """Custom FedAvg strategy with fednova based configuration and aggregation."""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def aggregate_fit_custom(
         self,
@@ -89,6 +91,8 @@ def aggregate_fednova(results: List[Tuple[NDArrays, float]]) -> NDArrays:
 
 class ScaffoldStrategy(FedAvg):
     """Implement custom strategy for SCAFFOLD based on FedAvg class."""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def aggregate_fit(
         self,
