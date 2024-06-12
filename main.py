@@ -258,7 +258,7 @@ def run_FL_for_n_clients(the_client_fn, clients,sample_net, dataset_title, IID=T
 # SCAFFOLD STRATEGY
 #################################################################################
 class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
-    def __init__(self, C, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.global_c = None
         self.C = C  # Control variate provided as a parameter
