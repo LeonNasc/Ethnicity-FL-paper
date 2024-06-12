@@ -266,7 +266,7 @@ class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
         """Initialize the parameters and control variates."""
         initial_parameters = super().initialize_parameters(client_manager)
         if initial_parameters is not None:
-            self.global_c = [torch.zeros_like(torch.tensor(param)) for param in initial_parameters.parameters()]
+            self.global_c = [torch.zeros_like(param) for param in initial_parameters]
         return initial_parameters
 
     def aggregate_fit(self, rnd, results, failures):
@@ -292,7 +292,7 @@ class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
         config = super().configure_fit(rnd, parameters, client_manager)
         
         if self.global_c is None:
-            self.global_c = [torch.zeros_like(torch.tensor(param)) for param in parameters]
+            self.global_c = [torch.zeros_like(param) for param in parameters]
 
         fit_ins = fl.common.FitIns(parameters, {"global_c": self.global_c, "C": self.C})
         
@@ -302,6 +302,7 @@ class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
             client_instructions.append((client_proxy, fit_ins))
 
         return client_instructions
+
 
 #######################################################################################################
 if __name__ == "__main__":
