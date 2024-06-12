@@ -261,7 +261,6 @@ class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.global_c = None
-        self.C = C  # Control variate provided as a parameter
 
     def initialize_parameters(self, client_manager):
         """Initialize the parameters and control variates."""
