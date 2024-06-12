@@ -5,7 +5,7 @@ import numpy as np
 from typing import List, Tuple
 from logging import DEBUG
 from flwr.common.logger import log
-from neural_nets import get_parameters, set_parameters, train, test, _resnet18
+from neural_nets import get_parameters, set_parameters, train, test, _resnet18, ProserLoss
 from flwr.common import Metrics
 from torcheval.metrics.functional import multiclass_f1_score
 
@@ -32,15 +32,19 @@ class FlowerClient(fl.client.NumPyClient):
         # Use values provided by the config
         print(f"[Client {self.cid}, round {server_round}] fit, config: {config}")
         set_parameters(self.net, parameters)
-        train(self.net, self.trainloader, epochs=local_epochs, DEVICE=self.device, open_set = self.open_set)
+
+        if (self.open_set == False):
+            train(self.net, self.trainloader, epochs=local_epochs, DEVICE=self.device)
+        else:
+            train(self.net, self.trainloader, epochs=local_epochs, DEVICE=self.device, loss_fn=ProserLoss)
+
         return get_parameters(self.net), len(self.trainloader), {}
 
     def evaluate(self, parameters, config):
         print(f"[Client {self.cid}] evaluate, config: {config}")
         set_parameters(self.net, parameters)
-        loss, accuracy, f1, roc, kappa, precision, recall, weights = test(self.net, self.valloader, DEVICE=self.device, 
-                                                                        classes=self.classes, open_set=self.open_set)
 
+        loss, accuracy, f1, roc, kappa, precision, recall, weights = test(self.net, self.valloader, DEVICE=self.device, classes=self.classes)
         return float(loss), len(self.valloader), {"accuracy": float(accuracy), 
                                                     "f1": f1.item(), 
                                                     "roc": roc.item(), 
@@ -126,7 +130,6 @@ def get_votes(outputs):
 
     return results
 
-
 def fit_config(server_round: int):
     config = {
         "server_round": server_round,
@@ -137,8 +140,6 @@ def fit_config(server_round: int):
 def display_parameters(arr):
     for i,layer in enumerate(arr):
         print(f"Layer {i}, shape {layer.shape}")
-
-
 
 def save_tuples_to_csv(data, filename):
     """

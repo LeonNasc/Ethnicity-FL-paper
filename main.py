@@ -7,7 +7,7 @@ import gc
 from neural_nets import _resnet18, get_parameters
 from logging import INFO
 from flwr.common.logger import log
-from Clients import FlowerClient, weighted_average_resnet_CIFAR_open_set, fit_config
+from Clients import FlowerClient, weighted_average_resnet_CIFAR_open_set, fit_config, weighted_average
 
 today = datetime.datetime.today()
 fl.common.logger.configure(identifier="FL Paper Experiment", filename=f"./logs/log_FLWR_{today.timestamp()}.txt")
@@ -48,6 +48,7 @@ client_resources = get_resources()
 #sample_net = _resnet18(classes=100,shape=(32,32))
 
 def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
+
     fedTAvg = fl.server.strategy.FedTrimmedAvg(
     beta = 0.2,
     fraction_fit=fraction_fit,  
@@ -56,7 +57,7 @@ def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     min_evaluate_clients=1, 
     min_available_clients=1,
     on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
+    evaluate_metrics_aggregation_fn=weighted_average,
     initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
 )
     fedAdaGrad = fl.server.strategy.FedAdagrad(
@@ -66,7 +67,17 @@ def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     min_evaluate_clients=1, 
     min_available_clients=1,
     on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
+    evaluate_metrics_aggregation_fn=weighted_average,
+    initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
+)
+    scaffold = SCAFFOLDStrategy(
+    fraction_fit=fraction_fit,  
+    fraction_evaluate=fraction_eval,  
+    min_fit_clients=1,  
+    min_evaluate_clients=1, 
+    min_available_clients=1,
+    on_fit_config_fn=fit_config,
+    evaluate_metrics_aggregation_fn=weighted_average,
     initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
 )
 
@@ -127,7 +138,7 @@ def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     return (fedAvg, fedProx, fedAvgM, fedAdam, fedYogi)
     '''   
 
-    return (fedTAvg,fedAdaGrad)
+    return (fedTAvg, scaffold)
 
 # #### CIFAR10 setup: Client FNS ####
 # A couple of client_fns for using with Flower, one for each dataset experiment
@@ -234,45 +245,94 @@ def client_fn_FedFaces_nonIID(cid: str) -> FlowerClient:
     return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 
-def run_FL_for_n_clients(the_client_fn, clients,sample_net, IID=True):
+def run_FL_for_n_clients(the_client_fn, clients,sample_net, dataset_title, IID=True):
     all_metrics = {}
     for strategy in setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
-        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"FedFaces - {str(strategy)} - {clients} clients - {"" if IID else "non-"} IID Distribution")
+        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"{dataset_title} - {str(strategy)} - {clients} clients - {"" if IID else "non-"} IID Distribution")
         all_metrics[str(strategy)] = experiment.simulate_FL(TRAINING_ROUNDS, clients)
     
     return all_metrics
+
+class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
+    def __init__(self, C, **kwargs):
+        super().__init__(**kwargs)
+        self.global_c = None
+
+    def initialize_parameters(self, client_manager):
+        """Initialize the parameters and control variates."""
+        initial_parameters = super().initialize_parameters(client_manager)
+        if initial_parameters is not None:
+            self.global_c = [torch.zeros_like(param) for param in initial_parameters]
+        return initial_parameters
+
+    def aggregate_fit(self, rnd, results, failures):
+        """Aggregate fit results using SCAFFOLD logic."""
+        aggregated_weights = super().aggregate_fit(rnd, results, failures)
+
+        if aggregated_weights is not None:
+            num_clients = len(results)
+            new_global_c = [
+                torch.zeros_like(param) for param in self.global_c
+            ]
+            for i in range(num_clients):
+                local_c = results[i].metrics['client_c']
+                for gc, lc in zip(new_global_c, local_c):
+                    gc += torch.tensor(lc) / num_clients
+
+            self.global_c = new_global_c
+            return aggregated_weights, {"global_c": self.global_c}
+
+        return aggregated_weights, {"global_c": self.global_c}
+
+    def configure_fit(self, rnd, parameters, client_manager):
+        """Configure the next round of training."""
+        config = super().configure_fit(rnd, parameters, client_manager)
+        
+        if self.global_c is None:
+            self.global_c = [torch.zeros_like(param) for param in parameters]
+
+        fit_ins = fl.common.FitIns(parameters, {"global_c": self.global_c, "C": self.C})
+        
+        # Distribute global parameters and control variates to all clients
+        client_instructions = []
+        for client_proxy in client_manager.sample_clients(num_clients=len(client_manager.clients)):
+            client_instructions.append((client_proxy, fit_ins))
+
+        return client_instructions
 
 if __name__ == "__main__":
     print(
         f"Training on {DEVICE} using PyTorch {torch.__version__} and Flower {fl.__version__}"
     )
 
-    TRAINING_ROUNDS = 100
+    TRAINING_ROUNDS = 2
 
     classes = 10 #+ 1
     sample_net = _resnet18(classes=classes, shape=(32,32))
 
     clients = 5
     DATA_STORE["CIFAR10_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR10")
-    run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net)
+    run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net, "CIFAR10")
     del DATA_STORE["CIFAR10_IID"]
 
     DATA_STORE["CIFAR10_nonIID"]= partition_scripts.partition_CIFAR_nonIID(clients, "CIFAR10")
-    run_FL_for_n_clients(client_fn_CIFAR10_nonIID, clients, sample_net, IID=False)
+    run_FL_for_n_clients(client_fn_CIFAR10_nonIID, clients, sample_net, "CIFAR10", IID=False)
     del DATA_STORE["CIFAR10_nonIID"]
 
+    classes = 100 #+ 1
     DATA_STORE["CIFAR100_IID"]= partition_scripts.partition_CIFAR_IID(clients, "CIFAR100")
-    run_FL_for_n_clients(client_fn_CIFAR100_IID, clients, sample_net)
+    run_FL_for_n_clients(client_fn_CIFAR100_IID, clients, sample_net, "CIFAR100")
     del DATA_STORE["CIFAR100_IID"]
 
     DATA_STORE["CIFAR100_nonIID"]= partition_scripts.partition_CIFAR_nonIID(clients, "CIFAR100")
-    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net, IID=False)
+    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net, "CIFAR100", IID=False)
     del DATA_STORE["CIFAR100_nonIID"]
 
+    classes = 4 #+ 1
     DATA_STORE["FedFaces_IID"]= partition_scripts.partition_FedFaces_IID(clients)
-    run_FL_for_n_clients(client_fn_CIFAR100_IID, clients, sample_net)
+    run_FL_for_n_clients(client_fn_FedFaces_IID, clients, sample_net, "FedFaces")
     del DATA_STORE["FedFaces_IID"]
 
     DATA_STORE["FedFaces_nonIID"]= partition_scripts.partition_FedFaces_nonIID(clients)
-    run_FL_for_n_clients(client_fn_CIFAR100_nonIID, clients, sample_net, IID=False)
+    run_FL_for_n_clients(client_fn_FedFaces_nonIID, clients, sample_net, "FedFaces", IID=False)
     del DATA_STORE["FedFaces_nonIID"]

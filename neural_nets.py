@@ -102,9 +102,9 @@ class Net(nn.Module):
 
 
 
-def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu", open_set = False):
+def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu", loss_fn = torch.nn.CrossEntropyLoss):
     """Train the network on the training set."""
-    criterion = torch.nn.CrossEntropyLoss()
+    criterion = loss_fn()
     optimizer = torch.optim.SGD(net.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
     net.train()
     for epoch in range(epochs):
@@ -113,9 +113,6 @@ def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu", open_set =
             images, labels = images.to(DEVICE), labels.to(DEVICE)
             optimizer.zero_grad()
             outputs = net(images)
-            if open_set:
-                outputs = calculate_unknown(outputs)
-
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -132,19 +129,7 @@ def train(net, trainloader, epochs: int, verbose=False, DEVICE="cpu", open_set =
             print(f"Epoch {epoch+1}: train loss {epoch_loss}, accuracy {epoch_acc}")
 
 
-def calculate_unknown(outputs):
-
-    for i,_ in enumerate(outputs):
-        logits = outputs[i]
-        probs = torch.nn.functional.softmax(logits)
-
-        if max(probs) < 0.5:
-            outputs[i] = torch.zeros(len(outputs[i]))
-            outputs[i][-1] = 1.0
-
-    return outputs
-
-def test(net, testloader, DEVICE="cpu", classes=2, open_set = False):
+def test(net, testloader, DEVICE="cpu", classes=2):
     """Evaluate the network on the entire test set."""
     criterion = torch.nn.CrossEntropyLoss()
     correct, total, loss, f1, roc, kappa  = 0, 0, 0.0, 0.0, 0.0, 0.0
@@ -230,12 +215,46 @@ def VGG19(classes, shape=(32,32)):
     return _VGG('VGG19', classes, shape)
 
 ##################################################
-# Resnet50 network
+# Resnet network
 def _resnet18(classes, shape=None):
     net = resnet18()
     net.fc = nn.Linear(512, classes)
     
     return net
+
+
+#################################################
+# PROSER loss function for open set voting
+################################################
+class ProserLoss(nn.Module):
+    def __init__(self, num_classes, feature_dim, unknown_class=True):
+        super(ProserLoss, self).__init__()
+        self.num_classes = num_classes
+        self.feature_dim = feature_dim
+        self.unknown_class = unknown_class
+        self.prototypes = nn.Parameter(torch.randn(num_classes + int(unknown_class), feature_dim))
+    
+    def forward(self, features, targets):
+        # Normalize features and prototypes
+        features = F.normalize(features, p=2, dim=1)
+        prototypes = F.normalize(self.prototypes, p=2, dim=1)
+
+        # Compute distances
+        distances = torch.cdist(features, prototypes, p=2)
+
+        # Convert distances to logits
+        logits = -distances
+
+        # Compute softmax cross entropy loss
+        if self.unknown_class:
+            # Targets for known classes, unknown class index is num_classes
+            unknown_targets = torch.full_like(targets, self.num_classes)
+            combined_targets = torch.where(targets < self.num_classes, targets, unknown_targets)
+            loss = F.cross_entropy(logits, combined_targets)
+        else:
+            loss = F.cross_entropy(logits, targets)
+
+        return loss
 
 ######################################## 
 #   Neural Network Parameter Funcionality for FL
