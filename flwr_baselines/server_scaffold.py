@@ -125,11 +125,15 @@ class ScaffoldServer(Server):
                 aggregated_result[0]
             )
         aggregated_parameters = aggregated_result_arrays_combined[
-            : len(aggregated_result_arrays_combined) // 1
+            : len(aggregated_result_arrays_combined) // 2
         ]
         aggregated_cv_update = aggregated_result_arrays_combined[
-            len(aggregated_result_arrays_combined) // 1 :
+            len(aggregated_result_arrays_combined) // 2 :
         ]
+
+        
+        print("agg_cv", len(aggregated_cv_update))
+        print("server_cv", len(server_cv_np))
 
         # convert server cv into ndarrays
         server_cv_np = [cv.numpy() for cv in self.server_cv]
