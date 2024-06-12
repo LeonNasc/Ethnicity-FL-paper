@@ -125,10 +125,10 @@ class ScaffoldServer(Server):
                 aggregated_result[0]
             )
         aggregated_parameters = aggregated_result_arrays_combined[
-            : len(aggregated_result_arrays_combined) // 2
+            : len(aggregated_result_arrays_combined) // 1
         ]
         aggregated_cv_update = aggregated_result_arrays_combined[
-            len(aggregated_result_arrays_combined) // 2 :
+            len(aggregated_result_arrays_combined) // 1 :
         ]
 
         # convert server cv into ndarrays

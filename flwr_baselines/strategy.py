@@ -24,6 +24,9 @@ class FedNovaStrategy(FedAvg):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def __repr__(self):
+        return "FedNova"
+
     def aggregate_fit_custom(
         self,
         server_round: int,
@@ -93,6 +96,9 @@ class ScaffoldStrategy(FedAvg):
     """Implement custom strategy for SCAFFOLD based on FedAvg class."""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    def __repr__(self):
+        return "Scaffold"
 
     def aggregate_fit(
         self,
