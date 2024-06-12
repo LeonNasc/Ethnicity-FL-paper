@@ -1,19 +1,22 @@
 import torch
-import partition_scripts
+import src.partition_scripts as partition_scripts
 import datetime
 import flwr as fl
 import gc
 
-from neural_nets import _resnet18, get_parameters
+from src.neural_nets import _resnet18, get_parameters
 from logging import INFO
 from flwr.common.logger import log
-from Clients import FlowerClient, weighted_average_resnet_CIFAR_open_set, fit_config, weighted_average
+from src.Clients import FlowerClient, fit_config, weighted_average
+from flwr_baselines.clients import FlowerClientFedNova, FlowerClientScaffold
+from flwr_baselines.strategy import FedNovaStrategy, ScaffoldStrategy
 
 today = datetime.datetime.today()
 fl.common.logger.configure(identifier="FL Paper Experiment", filename=f"./logs/log_FLWR_{today.timestamp()}.txt")
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 DATA_STORE = {}
+CLIENT_OBJ = FlowerClient
 
 class FedExperiment():
 
@@ -44,103 +47,7 @@ def  get_resources():
 
 client_resources = get_resources()
 
-# Needed for initial params in fedAdam and FedYogi
-#sample_net = _resnet18(classes=100,shape=(32,32))
 
-def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
-
-    fedTAvg = fl.server.strategy.FedTrimmedAvg(
-    beta = 0.2,
-    fraction_fit=fraction_fit,  
-    fraction_evaluate=fraction_eval,  
-    min_fit_clients=1,  
-    min_evaluate_clients=1, 
-    min_available_clients=1,
-    on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average,
-    initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
-)
-    fedAdaGrad = fl.server.strategy.FedAdagrad(
-    fraction_fit=fraction_fit,  
-    fraction_evaluate=fraction_eval,  
-    min_fit_clients=1,  
-    min_evaluate_clients=1, 
-    min_available_clients=1,
-    on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average,
-    initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
-)
-    scaffold = SCAFFOLDStrategy(
-    fraction_fit=fraction_fit,  
-    fraction_evaluate=fraction_eval,  
-    min_fit_clients=1,  
-    min_evaluate_clients=1, 
-    min_available_clients=1,
-    on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average,
-    initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
-)
-
-    '''Just for a short experiment
-    fedAvg = fl.server.strategy.FedAvg(
-    fraction_fit=fraction_fit,  
-    fraction_evaluate=fraction_eval,  
-    min_fit_clients=1,  
-    min_evaluate_clients=1, 
-    min_available_clients=1,
-    on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
-    initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
-)
-
-    fedProx = fl.server.strategy.FedProx(
-    fraction_fit=fraction_fit,  
-    fraction_evaluate=fraction_eval,  
-    min_fit_clients=1,  
-    min_evaluate_clients=1, 
-    min_available_clients=1,
-    on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
-    proximal_mu= 0.5
-)
-
-    fedAvgM = fl.server.strategy.FedAvgM(
-    fraction_fit=fraction_fit,  
-    fraction_evaluate=fraction_eval,  
-    min_fit_clients=1,  
-    min_evaluate_clients=1, 
-    min_available_clients=1,
-    on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
-)
-
-    fedAdam = fl.server.strategy.FedAdam(
-    fraction_fit=fraction_fit,  
-    fraction_evaluate=fraction_eval,  
-    min_fit_clients=1,  
-    min_evaluate_clients=1, 
-    min_available_clients=1,
-    on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
-    initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
-)
-
-    fedYogi = fl.server.strategy.FedYogi(
-    fraction_fit=fraction_fit,  
-    fraction_evaluate=fraction_eval,  
-    min_fit_clients=1,  
-    min_evaluate_clients=1, 
-    min_available_clients=1,
-    on_fit_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average_resnet_CIFAR_open_set,
-    initial_parameters=fl.common.ndarrays_to_parameters(get_parameters(sample_net))
-    )
-    return (fedAvg, fedProx, fedAvgM, fedAdam, fedYogi)
-    '''   
-
-    return [scaffold]
-
-# #### CIFAR10 setup: Client FNS ####
 # A couple of client_fns for using with Flower, one for each dataset experiment
 def client_fn_CIFAR10_IID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
@@ -157,7 +64,7 @@ def client_fn_CIFAR10_IID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
+    return CLIENT_OBJ(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 def client_fn_CIFAR10_nonIID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
@@ -174,7 +81,7 @@ def client_fn_CIFAR10_nonIID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
+    return CLIENT_OBJ(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 def client_fn_CIFAR100_nonIID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
@@ -191,7 +98,7 @@ def client_fn_CIFAR100_nonIID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
+    return CLIENT_OBJ(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 def client_fn_CIFAR100_IID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
@@ -208,7 +115,7 @@ def client_fn_CIFAR100_IID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
+    return CLIENT_OBJ(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 
 def client_fn_FedFaces_IID(cid: str) -> FlowerClient:
@@ -226,7 +133,7 @@ def client_fn_FedFaces_IID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
+    return CLIENT_OBJ(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 def client_fn_FedFaces_nonIID(cid: str) -> FlowerClient:
     """Create a Flower client representing a single organization."""
@@ -242,67 +149,21 @@ def client_fn_FedFaces_nonIID(cid: str) -> FlowerClient:
     valloader = valloaders[int(cid)]
 
     # Create a  single Flower client representing a single organization
-    return FlowerClient(net, trainloader, valloader, cid, DEVICE, classes).to_client()
+    return CLIENT_OBJ(net, trainloader, valloader, cid, DEVICE, classes).to_client()
 
 
 def run_FL_for_n_clients(the_client_fn, clients,sample_net, dataset_title, IID=True):
     all_metrics = {}
     text = "" if IID else "non-"
-    for strategy in setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
+    #for strategy in setup_strategies(sample_net, fraction_fit=1, fraction_eval=1): #Original implementation
+    strategies = [ScaffoldStrategy, FedNovaStrategy]
+    for i, client_type in enumerate([FlowerClientScaffold, FlowerClientFedNova]):
+        CLIENT_OBJ = client_type
+        strategy = strategies[i] 
         experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"{dataset_title} - {str(strategy)} - {clients} clients - {text} IID Distribution")
         all_metrics[str(strategy)] = experiment.simulate_FL(TRAINING_ROUNDS, clients)
     
     return all_metrics
-
-##################################################################################
-# SCAFFOLD STRATEGY
-#################################################################################
-class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.global_c = None
-
-    def initialize_parameters(self, client_manager):
-        """Initialize the parameters and control variates."""
-        initial_parameters = super().initialize_parameters(client_manager)
-        if initial_parameters is not None:
-            self.global_c = [torch.zeros_like(param) for param in initial_parameters]
-        return initial_parameters
-
-    def aggregate_fit(self, rnd, results, failures):
-        """Aggregate fit results using SCAFFOLD logic."""
-        aggregated_weights = super().aggregate_fit(rnd, results, failures)
-
-        if aggregated_weights is not None:
-            num_clients = len(results)
-            new_global_c = [torch.zeros_like(param) for param in self.global_c]
-            
-            for _, fit_res in results:
-                local_c = fit_res.metrics['client_c']
-                for gc, lc in zip(new_global_c, local_c):
-                    gc += torch.tensor(lc) / num_clients
-
-            self.global_c = new_global_c
-            return aggregated_weights, {"global_c": self.global_c}
-
-        return aggregated_weights, {"global_c": self.global_c}
-
-    def configure_fit(self, rnd, parameters, client_manager):
-        """Configure the next round of training."""
-        config = super().configure_fit(rnd, parameters, client_manager)
-        
-        if self.global_c is None:
-            self.global_c = [torch.zeros_like(param) for param in parameters]
-
-        fit_ins = fl.common.FitIns(parameters, {"global_c": self.global_c, "C": self.C})
-        
-        # Distribute global parameters and control variates to all clients
-        client_instructions = []
-        for client_proxy in client_manager.sample_clients(num_clients=len(client_manager.clients)):
-            client_instructions.append((client_proxy, fit_ins))
-
-        return client_instructions
-
 
 #######################################################################################################
 if __name__ == "__main__":
