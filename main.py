@@ -13,7 +13,7 @@ from src.Clients import FlowerClient, fit_config, weighted_average
 from flwr_baselines.clients import FlowerClientFedNova, FlowerClientScaffold
 from flwr_baselines.strategy import FedNovaStrategy, ScaffoldStrategy
 from flwr_baselines.server_scaffold import ScaffoldServer
-from flwr_baselines.server_scaffold import FedNovaServer
+from flwr_baselines.server_fednova import FedNovaServer
 
 today = datetime.datetime.today()
 fl.common.logger.configure(identifier="FL Paper Experiment", filename=f"./logs/log_FLWR_{today.timestamp()}.txt")
