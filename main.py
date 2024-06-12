@@ -181,6 +181,7 @@ if __name__ == "__main__":
     run_FL_for_n_clients(client_fn_CIFAR10_IID, clients, sample_net, "CIFAR10")
     del DATA_STORE["CIFAR10_IID"]
 
+    '''
     DATA_STORE["CIFAR10_nonIID"]= partition_scripts.partition_CIFAR_nonIID(clients, "CIFAR10")
     run_FL_for_n_clients(client_fn_CIFAR10_nonIID, clients, sample_net, "CIFAR10", IID=False)
     del DATA_STORE["CIFAR10_nonIID"]
@@ -202,3 +203,4 @@ if __name__ == "__main__":
     DATA_STORE["FedFaces_nonIID"]= partition_scripts.partition_FedFaces_nonIID(clients)
     run_FL_for_n_clients(client_fn_FedFaces_nonIID, clients, sample_net, "FedFaces", IID=False)
     del DATA_STORE["FedFaces_nonIID"]
+    '''
