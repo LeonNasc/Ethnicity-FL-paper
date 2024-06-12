@@ -38,7 +38,7 @@ class FedExperiment():
 # Specify client resources if you need GPU (defaults to 1 CPU and 0 GPU)
 def  get_resources():
     if DEVICE.type == "cpu":
-        client_resources = {"num_cpus": 10, "num_gpus": 0, "memory": 3*1024*1024*1024}
+        client_resources = {"num_cpus": 8, "num_gpus": 0, "memory": 3*1024*1024*1024}
 
     return client_resources
 
@@ -138,7 +138,7 @@ def setup_strategies(sample_net, fraction_fit=1, fraction_eval=1):
     return (fedAvg, fedProx, fedAvgM, fedAdam, fedYogi)
     '''   
 
-    return (fedTAvg, scaffold)
+    return [scaffold]
 
 # #### CIFAR10 setup: Client FNS ####
 # A couple of client_fns for using with Flower, one for each dataset experiment
