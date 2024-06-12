@@ -254,19 +254,20 @@ def run_FL_for_n_clients(the_client_fn, clients,sample_net, dataset_title, IID=T
     
     return all_metrics
 
+##################################################################################
+# SCAFFOLD STRATEGY
+#################################################################################
 class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
-    def __init__(self, **kwargs):
+    def __init__(self, C, **kwargs):
         super().__init__(**kwargs)
         self.global_c = None
-
-    def __repr__(self):
-        return "SCAFFOLD"
+        self.C = C  # Control variate provided as a parameter
 
     def initialize_parameters(self, client_manager):
         """Initialize the parameters and control variates."""
         initial_parameters = super().initialize_parameters(client_manager)
         if initial_parameters is not None:
-            self.global_c = [torch.zeros_like(param) for param in initial_parameters]
+            self.global_c = [torch.zeros_like(torch.tensor(param)) for param in initial_parameters.parameters()]
         return initial_parameters
 
     def aggregate_fit(self, rnd, results, failures):
@@ -275,11 +276,10 @@ class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
 
         if aggregated_weights is not None:
             num_clients = len(results)
-            new_global_c = [
-                torch.zeros_like(param) for param in self.global_c
-            ]
-            for i in range(num_clients):
-                local_c = results[i].metrics['client_c']
+            new_global_c = [torch.zeros_like(param) for param in self.global_c]
+            
+            for _, fit_res in results:
+                local_c = fit_res.metrics['client_c']
                 for gc, lc in zip(new_global_c, local_c):
                     gc += torch.tensor(lc) / num_clients
 
@@ -293,7 +293,7 @@ class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
         config = super().configure_fit(rnd, parameters, client_manager)
         
         if self.global_c is None:
-            self.global_c = [torch.zeros_like(param) for param in parameters]
+            self.global_c = [torch.zeros_like(torch.tensor(param)) for param in parameters]
 
         fit_ins = fl.common.FitIns(parameters, {"global_c": self.global_c, "C": self.C})
         
@@ -304,6 +304,7 @@ class SCAFFOLDStrategy(fl.server.strategy.FedAvg):
 
         return client_instructions
 
+#######################################################################################################
 if __name__ == "__main__":
     print(
         f"Training on {DEVICE} using PyTorch {torch.__version__} and Flower {fl.__version__}"
