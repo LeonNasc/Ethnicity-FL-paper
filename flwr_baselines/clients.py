@@ -7,7 +7,7 @@ import flwr as fl
 import torch
 from flwr.common import Scalar
 from torch.utils.data import DataLoader
-from models import test, train_scaffold, train_fednova
+from flwr_baselines.models import test, train_scaffold, train_fednova
 
 
 # pylint: disable=too-many-instance-attributes
