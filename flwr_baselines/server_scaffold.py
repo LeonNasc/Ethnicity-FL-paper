@@ -2,7 +2,6 @@
 
 import concurrent.futures
 from logging import DEBUG, INFO
-from typing import OrderedDict
 
 import torch
 from flwr.common import (
@@ -29,11 +28,7 @@ from flwr.server import Server
 from flwr.server.client_manager import ClientManager, SimpleClientManager
 from flwr.server.client_proxy import ClientProxy
 from flwr.server.strategy import Strategy
-from hydra.utils import instantiate
-from omegaconf import DictConfig
-from torch.utils.data import DataLoader
-
-from niid_bench.models import test
+from flwr_baselines.models import test
 
 FitResultsAndFailures = Tuple[
     List[Tuple[ClientProxy, FitRes]],
@@ -47,13 +42,13 @@ class ScaffoldServer(Server):
     def __init__(
         self,
         strategy: Strategy,
-        model: DictConfig,
+        model,
         client_manager: Optional[ClientManager] = None,
     ):
         if client_manager is None:
             client_manager = SimpleClientManager()
         super().__init__(client_manager=client_manager, strategy=strategy)
-        self.model_params = instantiate(model)
+        self.model_params = model
         self.server_cv: List[torch.Tensor] = []
 
     def _get_initial_parameters(self, timeout: Optional[float]) -> Parameters:
@@ -226,43 +221,3 @@ def _handle_finished_future_after_fit(
 
     # Not successful, client returned a result where the status code is not OK
     failures.append(result)
-
-
-def gen_evaluate_fn(
-    testloader: DataLoader,
-    device: torch.device,
-    model: DictConfig,
-) -> Callable[
-    [int, NDArrays, Dict[str, Scalar]], Optional[Tuple[float, Dict[str, Scalar]]]
-]:
-    """Generate the function for centralized evaluation.
-
-    Parameters
-    ----------
-    testloader : DataLoader
-        The dataloader to test the model with.
-    device : torch.device
-        The device to test the model on.
-
-    Returns
-    -------
-    Callable[ [int, NDArrays, Dict[str, Scalar]],
-               Optional[Tuple[float, Dict[str, Scalar]]] ]
-    The centralized evaluation function.
-    """
-
-    def evaluate(
-        server_round: int, parameters_ndarrays: NDArrays, config: Dict[str, Scalar]
-    ) -> Optional[Tuple[float, Dict[str, Scalar]]]:
-        # pylint: disable=unused-argument
-        """Use the entire Emnist test set for evaluation."""
-        net = instantiate(model)
-        params_dict = zip(net.state_dict().keys(), parameters_ndarrays)
-        state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
-        net.load_state_dict(state_dict, strict=True)
-        net.to(device)
-
-        loss, accuracy = test(net, testloader, device=device)
-        return loss, {"accuracy": accuracy}
-
-    return evaluate
