@@ -7,9 +7,13 @@ import gc
 from src.neural_nets import _resnet18, get_parameters
 from logging import INFO
 from flwr.common.logger import log
+from flwr.server.server import Server
+from flwr.server.client_manager import SimpleClientManager
 from src.Clients import FlowerClient, fit_config, weighted_average
 from flwr_baselines.clients import FlowerClientFedNova, FlowerClientScaffold
 from flwr_baselines.strategy import FedNovaStrategy, ScaffoldStrategy
+from flwr_baselines.server_scaffold import ScaffoldServer
+from flwr_baselines.server_scaffold import FedNovaServer
 
 today = datetime.datetime.today()
 fl.common.logger.configure(identifier="FL Paper Experiment", filename=f"./logs/log_FLWR_{today.timestamp()}.txt")
@@ -20,14 +24,26 @@ CLIENT_OBJ = FlowerClient
 
 class FedExperiment():
 
-    def __init__(self, client_fn,strategy, name="New experiment"):
+    def __init__(self, client_fn,strategy, net, name="New experiment"):
         self.client_fn = client_fn
         self.strategy = strategy
         self.name = name
+        self.net = net
 
     def simulate_FL(self, rounds, clients):
         log(INFO, "\n" + 10 * "========" + "\n" + self.name + " has started\n" + 10 * "========"  )
+
+
+        server = Server(strategy=self.strategy, client_manager=SimpleClientManager())
+        if isinstance(self.strategy, FedNovaStrategy):
+            server = FedNovaServer(strategy=self.strategy, client_manager=SimpleClientManager())
+        elif isinstance(self.strategy, ScaffoldStrategy):
+            server = ScaffoldServer(
+                strategy=self.strategy, model=self.net, client_manager=SimpleClientManager()
+            )
+
         metrics = fl.simulation.start_simulation(
+                            server = server,
                             client_fn=self.client_fn,
                             num_clients=clients,
                             config=fl.server.ServerConfig(num_rounds=rounds),
@@ -160,7 +176,7 @@ def run_FL_for_n_clients(the_client_fn, clients,sample_net, dataset_title, IID=T
     for i, client_type in enumerate([FlowerClientScaffold, FlowerClientFedNova]):
         CLIENT_OBJ = client_type
         strategy = strategies[i] 
-        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, name=f"{dataset_title} - {str(strategy)} - {clients} clients - {text} IID Distribution")
+        experiment = FedExperiment(client_fn=the_client_fn, strategy=strategy, net = sample_net, name=f"{dataset_title} - {str(strategy)} - {clients} clients - {text} IID Distribution")
         all_metrics[str(strategy)] = experiment.simulate_FL(TRAINING_ROUNDS, clients)
     
     return all_metrics
